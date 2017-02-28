@@ -40,9 +40,11 @@ import CncCalibrate from './widgets/CncCalibrate';
 import CncXYZControl from './widgets/CncXYZControl';
 
 import CncTaskControl from './widgets/CncTaskControl';
+import DekartCanvas from './widgets/DekartCanvas';
 
 // Babbler.js
 import Babbler from 'babbler-js';
+import BabblerCnc from '../babbler-cnc-js/src/babbler-cnc';
 
 const btnStyle = {
   margin: 12
@@ -51,8 +53,15 @@ const btnStyle = {
 
 // Устройство Babbler, подключенное к последовательному порту
 var babbler1 = new Babbler();
+var babblerCnc1 = new BabblerCnc(babbler1, {posPollDelay: 200});
 
+// Т.к. добавляем много слушателей, получаем предупреждение:
+// (node) warning: possible EventEmitter memory leak detected. 11 listeners added. 
+// Use emitter.setMaxListeners() to increase limit.
+babbler1.setMaxListeners(20);
 
+// babbler1.on(Babbler.Event.STATUS, function(){});
+ 
 // Контент приложения
 ReactDOM.render(
     <MuiThemeProvider muiTheme={getMuiTheme()}>
@@ -67,7 +76,11 @@ ReactDOM.render(
         <CncControlBar babbler={babbler1}/>
         <Tabs>
             <Tab label="Станок" >
-                <CncTaskControl babbler={babbler1}/>
+                {/*<CncTaskControl babblerCnc={babblerCnc1}/>*/}
+                <DekartCanvas 
+                    screen={{width:800, height:440}} 
+                    fold={{dimX: 300000000, dimY:216000000}} 
+                    babbler={babbler1}/>
             </Tab>
             <Tab label="Калибровка" >
                 <CncCalibrate babbler={babbler1}/>
@@ -95,8 +108,8 @@ ReactDOM.render(
         
         
         <Paper zDepth={3} style={{position: "absolute", bottom: 0, width: "100%", textAlign: "right", paddingRight: 14}}>
-            <CurrentPos babbler={babbler1} style={{marginRight: 10}}/>
-            <CncStatus babbler={babbler1} style={{marginRight: 10}}/>
+            <CurrentPos babblerCnc={babblerCnc1} style={{marginRight: 10}}/>
+            <CncStatus babblerCnc={babblerCnc1} style={{marginRight: 10}}/>
             <QueueStatus babbler={babbler1}/> 
         </Paper>
         

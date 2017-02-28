@@ -3,6 +3,7 @@
 var React = require('react');
 
 import Babbler from 'babbler-js';
+import BabblerCnc from '../../babbler-cnc-js/src/babbler-cnc';
 
 // Статус станка: работает, остановлен, на паузе
 // (working, stopped, paused)
@@ -11,57 +12,41 @@ var CncStatus = React.createClass({
 
     getInitialState: function() {
         return {
-            deviceStatus: this.props.babbler.deviceStatus,
-            cncStatus: "N/A"
+            deviceStatus: this.props.babblerCnc.babbler.deviceStatus,
+            cncStatus: this.props.babblerCnc.status
         };
     },
     
     componentDidMount: function() {
-        // задержка между опросами устройства
-        // по умолчанию получаем статус устройства два раза в секунду
-        var pollDelay = this.props.pollDelay ? this.props.pollDelay : 500;
-        
         // слушаем статус устройства
         this.deviceStatusListener = function(status) {
             this.setState({deviceStatus: status});
-            
-            // получаем текущий статус активности устройства, если подключены
-            if(status === Babbler.Status.CONNECTED) {
-                var getCncStatus = function() {
-                    this.props.babbler.sendCmd("status", [],
-                        // onResult
-                        function(err, reply, cmd, params) {
-                            if(err) {
-                                this.setState({err: err.message});
-                                //console.warn(cmd + (params.length > 0 ? " " + params : "") + ": " + err);
-                            } else {
-                                this.setState({
-                                    cncStatus: reply,
-                                    err: ''
-                                });
-                            }
-                            
-                            if(this.props.babbler.deviceStatus === Babbler.Status.CONNECTED) {
-                                setTimeout(getCncStatus, pollDelay);
-                            }
-                        }.bind(this)
-                    );
-                }.bind(this);
-                getCncStatus();
-            }
         }.bind(this);
-        this.props.babbler.on(Babbler.Event.STATUS, this.deviceStatusListener);
+        
+        // и статус рабочего блока устройства
+        // слушаем текущую позицию рабочего инструмента
+        this.cncStatusListener = function(status) {
+            this.setState({
+                cncStatus: status,
+            });
+        }.bind(this);
+        
+        this.props.babblerCnc.babbler.on(Babbler.Event.STATUS, this.deviceStatusListener);
+        this.props.babblerCnc.on(BabblerCnc.Event.STATUS, this.cncStatusListener);
     },
     
     componentWillUnmount: function() {
         // почистим слушателей
-        this.props.babbler.removeListener(Babbler.Event.STATUS, this.deviceStatusListener);
+        this.props.bablerCnc.babbler.removeListener(Babbler.Event.STATUS, this.deviceStatusListener);
+        this.props.babbler.removeListener(BabblerCnc.Event.STATUS, this.cncStatusListener);
     },
     
     render: function() {
         var connected = this.state.deviceStatus === Babbler.Status.CONNECTED ? true : false;
         return (
-            <span style={this.props.style}>{connected ? this.state.cncStatus : "N/A"}</span>
+            <span
+                style={(connected ? this.props.style : {...this.props.style, color: "gray"})}
+            >{this.state.cncStatus}</span>
         );
     }
 });

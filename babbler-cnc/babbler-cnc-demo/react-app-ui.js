@@ -40,7 +40,7 @@ import CncCalibrate from './widgets/CncCalibrate';
 import CncXYZControl from './widgets/CncXYZControl';
 
 import CncTaskControl from './widgets/CncTaskControl';
-import DekartCanvas from './widgets/DekartCanvas';
+//import DekartCanvas from './widgets/DekartCanvas';
 
 // Babbler.js
 import Babbler from 'babbler-js';
@@ -76,11 +76,13 @@ ReactDOM.render(
         <CncControlBar babbler={babbler1}/>
         <Tabs>
             <Tab label="Станок" >
-                {/*<CncTaskControl babblerCnc={babblerCnc1}/>*/}
-                <DekartCanvas 
-                    screen={{width:800, height:440}} 
-                    fold={{dimX: 300000000, dimY:216000000}} 
-                    babbler={babbler1}/>
+                <CncTaskControl babblerCnc={babblerCnc1} 
+                    screen={{width:"100%", height:"450"}} 
+                    fold={{dimX: 300, dimY:216}}/>
+                {/*<DekartCanvas
+                    screen={{width:"100%", height:"450"}} 
+                    fold={{dimX: 300, dimY:216}}
+                    pos="40 60 0"/>*/}
             </Tab>
             <Tab label="Калибровка" >
                 <CncCalibrate babbler={babbler1}/>

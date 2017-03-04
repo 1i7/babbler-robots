@@ -24,12 +24,10 @@ var DekartCanvas = React.createClass({
         //var gridSpacing;
         //var unit;
         
-        var pos = this.props.pos ? this.props.pos : "0 0 0";
-        
-        var posArr = pos.split(" ");
-        var posX = parseInt(posArr[0], 10)/1000000;
-        var posY = parseInt(posArr[1], 10)/1000000;
-        var posZ = parseInt(posArr[2], 10)/1000000;
+        //var pos = this.props.pos ? this.props.pos : {x:0, y:0, z:0};
+        var posX = this.props.posX ? this.props.posX/1000000 : 0;
+        var posY = this.props.posY ? this.props.posY/1000000 : 0;
+        var posZ = this.props.posZ ? this.props.posZ/1000000 : 0;
         
         return (
             <svg

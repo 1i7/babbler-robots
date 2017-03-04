@@ -55,6 +55,7 @@ function BabblerCnc(babbler, options) {
     
     // текущая позиция рабочего инструмента
     var _rawPos = "0 0 0";
+    var _pos = {x:0, y:0, z:0};
     var _posErr;
     
     // 
@@ -103,10 +104,17 @@ function BabblerCnc(babbler, options) {
             function(err, reply, cmd, params) {
                 if(err) {
                     _posErr = err;
-                } else {
+                    this.emit(BabblerCncEvent.POSITION, undefined, err);
+                } else if(_rawPos !== reply) {
                     _rawPos = reply;
+                    
+                    var posArr = _rawPos.split(" ");
+                    _pos.x = parseInt(posArr[0], 10);
+                    _pos.y = parseInt(posArr[1], 10);
+                    _pos.z = parseInt(posArr[2], 10);
+                    
+                    this.emit(BabblerCncEvent.POSITION, _pos, undefined);
                 }
-                this.emit(BabblerCncEvent.POSITION, reply, err);
                 
                 if(_babbler.deviceStatus === Babbler.Status.CONNECTED) {
                     setTimeout(getPos, _posPollDelay);
@@ -152,7 +160,7 @@ function BabblerCnc(babbler, options) {
          */
         pos: {
             get: function() {
-                return _rawPos;
+                return _pos;
             }
         },
         /** 

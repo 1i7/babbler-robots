@@ -37,8 +37,8 @@ var CncStatus = React.createClass({
     
     componentWillUnmount: function() {
         // почистим слушателей
-        this.props.bablerCnc.babbler.removeListener(Babbler.Event.STATUS, this.deviceStatusListener);
-        this.props.babbler.removeListener(BabblerCnc.Event.STATUS, this.cncStatusListener);
+        this.props.babblerCnc.babbler.removeListener(Babbler.Event.STATUS, this.deviceStatusListener);
+        this.props.babblerCnc.removeListener(BabblerCnc.Event.STATUS, this.cncStatusListener);
     },
     
     render: function() {

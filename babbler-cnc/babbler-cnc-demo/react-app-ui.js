@@ -73,7 +73,7 @@ ReactDOM.render(
                 iconSize={50}
                 style={{position: "absolute", right: 0, marginRight: 14, marginTop: 5}} />
         </Paper>
-        <CncControlBar babbler={babbler1}/>
+        <CncControlBar babblerCnc={babblerCnc1}/>
         <Tabs>
             <Tab label="Станок" >
                 <CncTaskControl babblerCnc={babblerCnc1} 

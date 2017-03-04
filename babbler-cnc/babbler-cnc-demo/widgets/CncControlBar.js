@@ -5,6 +5,7 @@ var React = require('react');
 import {Button, Glyph} from 'elemental';
 
 import Babbler from 'babbler-js';
+import BabblerCnc from '../../babbler-cnc-js/src/babbler-cnc';
 
 const btnStyle = {
   margin: 12
@@ -15,11 +16,13 @@ var RraptorControlPanel = React.createClass({
 // https://facebook.github.io/react/docs/events.html
 // http://elemental-ui.com/buttons
 // http://elemental-ui.com/glyphs
+// https://facebook.github.io/react/docs/jsx-in-depth.html
+// https://github.com/facebook/react/issues/690
 
     getInitialState: function() {
         return {
-            deviceStatus: this.props.babbler.deviceStatus,
-            err: ''
+            deviceStatus: this.props.babblerCnc.babbler.deviceStatus,
+            cncStatus: this.props.babblerCnc.status
         };
     },
     
@@ -28,12 +31,23 @@ var RraptorControlPanel = React.createClass({
         this.deviceStatusListener = function(status) {
             this.setState({deviceStatus: status});
         }.bind(this);
-        this.props.babbler.on(Babbler.Event.STATUS, this.deviceStatusListener);
+        
+        // и статус рабочего блока устройства
+        // слушаем текущую позицию рабочего инструмента
+        this.cncStatusListener = function(status) {
+            this.setState({
+                cncStatus: status,
+            });
+        }.bind(this);
+        
+        this.props.babblerCnc.babbler.on(Babbler.Event.STATUS, this.deviceStatusListener);
+        this.props.babblerCnc.on(BabblerCnc.Event.STATUS, this.cncStatusListener);
     },
     
     componentWillUnmount: function() {
         // почистим слушателей
-        this.props.babbler.removeListener(Babbler.Event.STATUS, this.deviceStatusListener);
+        this.props.babblerCnc.babbler.removeListener(Babbler.Event.STATUS, this.deviceStatusListener);
+        this.props.babblerCnc.removeListener(BabblerCnc.Event.STATUS, this.cncStatusListener);
     },
     
     render: function() {
@@ -41,14 +55,16 @@ var RraptorControlPanel = React.createClass({
         return (
             <div style={{textAlign: "center"}}>
                 <div>
-                    <Button size="lg" type="primary"
-                        onClick={this.cmd_pause}
-                        disabled={!connected}
-                        style={btnStyle} ><Glyph icon="quote"/></Button>
-                    <Button size="lg" type="primary"
-                        onClick={this.cmd_resume}
-                        disabled={!connected}
-                        style={btnStyle} ><Glyph icon="triangle-right"/></Button>
+                    {(this.state.cncStatus === BabblerCnc.Status.PAUSED) ?
+                        <Button size="lg" type="primary"
+                            onClick={this.cmd_resume}
+                            disabled={!connected}
+                            style={btnStyle} ><Glyph icon="triangle-right"/></Button> :
+                        <Button size="lg" type="primary"
+                            onClick={this.cmd_pause}
+                            disabled={!connected || this.state.cncStatus !== BabblerCnc.Status.WORKING}
+                            style={btnStyle} ><Glyph icon="quote"/></Button> 
+                    }
                     <Button size="lg" type="danger"
                         onClick={this.cmd_stop}
                         disabled={!connected}
@@ -70,15 +86,15 @@ var RraptorControlPanel = React.createClass({
     },
     
     cmd_pause: function() {
-        this.props.babbler.sendCmd("pause", [], this.onResult);
+        this.props.babblerCnc.babbler.sendCmd("pause", [], this.onResult);
     },
     
     cmd_resume: function() {
-        this.props.babbler.sendCmd("resume", [], this.onResult);
+        this.props.babblerCnc.babbler.sendCmd("resume", [], this.onResult);
     },
     
     cmd_stop: function() {
-        this.props.babbler.sendCmd("stop", [], this.onResult);
+        this.props.babblerCnc.babbler.sendCmd("stop", [], this.onResult);
     }
 });
 

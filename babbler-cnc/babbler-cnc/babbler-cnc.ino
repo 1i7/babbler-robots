@@ -234,7 +234,7 @@ int cmd_stop(char* reply_buffer, int reply_buf_size, int argc=0, char *argv[]=NU
 int cmd_status(char* reply_buffer, int reply_buf_size, int argc=0, char *argv[]=NULL) {
     if(stepper_is_cycle_running()) {
         if(!stepper_is_cycle_paused()) {
-            strcpy(reply_buffer, "running");
+            strcpy(reply_buffer, "working");
         } else {
             strcpy(reply_buffer, "paused");
         }
@@ -442,7 +442,7 @@ babbler_man_t MAN_STATUS = {
     "SYNOPSIS\n"
     "    status\n"
     "DESCRIPTION\n"
-    "Get stepper cycle status: running/paused/stopped."
+    "Get stepper cycle status: working/paused/stopped."
 };
 
 

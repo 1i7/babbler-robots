@@ -50,7 +50,7 @@ var CurrentPos = React.createClass({
         return (
             <span
                 style={(connected ? this.props.style : {...this.props.style, color: "gray"})}
-            >{this.state.pos}</span>
+            >{this.state.pos.x} {this.state.pos.y} {this.state.pos.z}</span>
         );
     }
 });

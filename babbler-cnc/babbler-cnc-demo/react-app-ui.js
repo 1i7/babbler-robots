@@ -66,18 +66,20 @@ babbler1.setMaxListeners(20);
 ReactDOM.render(
     <MuiThemeProvider muiTheme={getMuiTheme()}>
       <div>
-        <Paper>
+        <Paper style={{textAlign: "right"}}>
+            <CncControlBar babblerCnc={babblerCnc1}
+                style={{position: "absolute", left: 0, marginLeft: 14}}/>
             <BabblerConnectionPanel babbler={babbler1}/>
             <BabblerConnectionStatusIcon 
                 babbler={babbler1} 
                 iconSize={50}
-                style={{position: "absolute", right: 0, marginRight: 14, marginTop: 5}} />
+                style={{marginRight: 4, marginLeft: 10}} />
         </Paper>
-        <CncControlBar babblerCnc={babblerCnc1}/>
-        <Tabs>
+        
+        <Tabs style={{marginTop: 10}}>
             <Tab label="Станок" >
                 <CncTaskControl babblerCnc={babblerCnc1} 
-                    screen={{width:"100%", height:"450"}} 
+                    screen={{width:"100%", height:"450px"}} 
                     fold={{dimX: 300, dimY:216}}/>
                 {/*<DekartCanvas
                     screen={{width:"100%", height:"450"}} 
@@ -85,10 +87,18 @@ ReactDOM.render(
                     pos="40 60 0"/>*/}
             </Tab>
             <Tab label="Калибровка" >
-                <CncCalibrate babbler={babbler1}/>
+                <div style={{padding: 30, paddingTop: 40, textAlign: "center"}}>
+                    <Paper style={{textAlign: "center", display: "inline-block", padding: 20}}>
+                        <CncCalibrate babbler={babbler1}/>
+                    </Paper>
+                </div>
             </Tab>
             <Tab label="Моторы" >
-                <CncXYZControl babbler={babbler1}/>
+                <div style={{padding: 30, paddingTop: 40, textAlign: "center"}}>
+                    <Paper style={{textAlign: "center", display: "inline-block", padding: 20}}>
+                        <CncXYZControl babbler={babbler1}/>
+                    </Paper>
+                </div>
             </Tab>
             <Tab label="Отладка" >
                 <BabblerDebugPanel babbler={babbler1}
@@ -109,10 +119,13 @@ ReactDOM.render(
         </Tabs>
         
         
-        <Paper zDepth={3} style={{position: "absolute", bottom: 0, width: "100%", textAlign: "right", paddingRight: 14}}>
+        <Paper style={{
+                position: "fixed", bottom: 0, 
+                width: "100%", textAlign: "right"}}>
+            <Divider style={{width: "100%"}}/>
             <CurrentPos babblerCnc={babblerCnc1} style={{marginRight: 10}}/>
             <CncStatus babblerCnc={babblerCnc1} style={{marginRight: 10}}/>
-            <QueueStatus babbler={babbler1}/> 
+            <QueueStatus babbler={babbler1} style={{marginRight: 10}}/> 
         </Paper>
         
         <BabblerConnectionErrorSnackbar babbler={babbler1}/>

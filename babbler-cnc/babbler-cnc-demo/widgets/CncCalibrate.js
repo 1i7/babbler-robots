@@ -2,12 +2,17 @@
 
 var React = require('react');
 
-import {Button, Glyph} from 'elemental';
+import {Button, ButtonGroup, Glyph} from 'elemental';
 
 import Babbler from 'babbler-js';
 
 const btnStyle = {
   margin: 12
+};
+
+const btnStyle1 = {
+  marginTop: 12,
+  marginBottom: 12
 };
 
 // Управление моторами
@@ -47,18 +52,20 @@ var CncCalibrate = React.createClass({
                         onMouseUp={this.cmd_stop}
                         disabled={!connected}
                         style={btnStyle} ><Glyph icon="chevron-left"/></Button>
-                    <Button size="lg" type="warning"
-                        onClick={this.cmd_rr_go_x_backward}
-                        disabled={!connected}
-                        style={btnStyle} ><Glyph icon="triangle-left"/></Button>
-                    <Button size="lg" type="danger"
-                        onClick={this.cmd_stop}
-                        disabled={!connected}
-                        style={btnStyle} ><Glyph icon="primitive-square"/></Button>
-                    <Button size="lg" type="warning"
-                        onClick={this.cmd_rr_go_x_forward}
-                        disabled={!connected}
-                        style={btnStyle} ><Glyph icon="triangle-right"/></Button>
+                    <ButtonGroup>
+                        <Button size="lg" type="warning"
+                            onClick={this.cmd_rr_go_x_backward}
+                            disabled={!connected}
+                            style={btnStyle1} ><Glyph icon="triangle-left"/></Button>
+                        <Button size="lg" type="danger"
+                            onClick={this.cmd_stop}
+                            disabled={!connected}
+                            style={btnStyle1} ><Glyph icon="primitive-square"/></Button>
+                        <Button size="lg" type="warning"
+                            onClick={this.cmd_rr_go_x_forward}
+                            disabled={!connected}
+                            style={btnStyle1} ><Glyph icon="triangle-right"/></Button>
+                    </ButtonGroup>
                     <Button size="lg" type="primary"
                         onMouseDown={this.cmd_rr_go_x_forward}
                         onMouseUp={this.cmd_stop}
@@ -72,18 +79,20 @@ var CncCalibrate = React.createClass({
                         onMouseUp={this.cmd_stop}
                         disabled={!connected}
                         style={btnStyle} ><Glyph icon="chevron-left"/></Button>
-                    <Button size="lg" type="warning"
-                        onClick={this.cmd_rr_go_y_backward}
-                        disabled={!connected}
-                        style={btnStyle} ><Glyph icon="triangle-left"/></Button>
-                    <Button size="lg" type="danger"
-                        onClick={this.cmd_stop}
-                        disabled={!connected}
-                        style={btnStyle} ><Glyph icon="primitive-square"/></Button>
-                    <Button size="lg" type="warning"
-                        onClick={this.cmd_rr_go_y_forward}
-                        disabled={!connected}
-                        style={btnStyle} ><Glyph icon="triangle-right"/></Button>
+                    <ButtonGroup>
+                        <Button size="lg" type="warning"
+                            onClick={this.cmd_rr_go_y_backward}
+                            disabled={!connected}
+                            style={btnStyle1} ><Glyph icon="triangle-left"/></Button>
+                        <Button size="lg" type="danger"
+                            onClick={this.cmd_stop}
+                            disabled={!connected}
+                            style={btnStyle1} ><Glyph icon="primitive-square"/></Button>
+                        <Button size="lg" type="warning"
+                            onClick={this.cmd_rr_go_y_forward}
+                            disabled={!connected}
+                            style={btnStyle1} ><Glyph icon="triangle-right"/></Button>
+                    </ButtonGroup>
                     <Button size="lg" type="primary"
                         onMouseDown={this.cmd_rr_go_y_forward}
                         onMouseUp={this.cmd_stop}
@@ -97,18 +106,20 @@ var CncCalibrate = React.createClass({
                         onMouseUp={this.cmd_stop}
                         disabled={!connected}
                         style={btnStyle} ><Glyph icon="chevron-left"/></Button>
-                    <Button size="lg" type="warning"
-                        onClick={this.cmd_rr_go_z_backward}
-                        disabled={!connected}
-                        style={btnStyle} ><Glyph icon="triangle-left"/></Button>
-                    <Button size="lg" type="danger"
-                        onClick={this.cmd_stop}
-                        disabled={!connected}
-                        style={btnStyle} ><Glyph icon="primitive-square"/></Button>
-                    <Button size="lg" type="warning"
-                        onClick={this.cmd_rr_go_z_forward}
-                        disabled={!connected}
-                        style={btnStyle} ><Glyph icon="triangle-right"/></Button>
+                    <ButtonGroup>
+                        <Button size="lg" type="warning"
+                            onClick={this.cmd_rr_go_z_backward}
+                            disabled={!connected}
+                            style={btnStyle1} ><Glyph icon="triangle-left"/></Button>
+                        <Button size="lg" type="danger"
+                            onClick={this.cmd_stop}
+                            disabled={!connected}
+                            style={btnStyle1} ><Glyph icon="primitive-square"/></Button>
+                        <Button size="lg" type="warning"
+                            onClick={this.cmd_rr_go_z_forward}
+                            disabled={!connected}
+                            style={btnStyle1} ><Glyph icon="triangle-right"/></Button>
+                    </ButtonGroup>
                     <Button size="lg" type="primary"
                         onMouseDown={this.cmd_rr_go_z_forward}
                         onMouseUp={this.cmd_stop}

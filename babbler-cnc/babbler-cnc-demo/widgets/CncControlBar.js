@@ -53,24 +53,22 @@ var RraptorControlPanel = React.createClass({
     render: function() {
         var connected = this.state.deviceStatus === Babbler.Status.CONNECTED ? true : false;
         return (
-            <div style={{textAlign: "center"}}>
-                <div>
-                    {(this.state.cncStatus === BabblerCnc.Status.PAUSED) ?
-                        <Button size="lg" type="primary"
-                            onClick={this.cmd_resume}
-                            disabled={!connected}
-                            style={btnStyle} ><Glyph icon="triangle-right"/></Button> :
-                        <Button size="lg" type="primary"
-                            onClick={this.cmd_pause}
-                            disabled={!connected || this.state.cncStatus !== BabblerCnc.Status.WORKING}
-                            style={btnStyle} ><Glyph icon="quote"/></Button> 
-                    }
-                    <Button size="lg" type="danger"
-                        onClick={this.cmd_stop}
+            <span style={{...this.props.style, textAlign: "center"}}>
+                <Button size="lg" type="danger"
+                    onClick={this.cmd_stop}
+                    disabled={!connected}
+                    style={btnStyle} ><Glyph icon="primitive-square"/></Button>
+                {(this.state.cncStatus === BabblerCnc.Status.PAUSED) ?
+                    <Button size="lg" type="primary"
+                        onClick={this.cmd_resume}
                         disabled={!connected}
-                        style={btnStyle} ><Glyph icon="primitive-square"/></Button>
-                </div>
-            </div>
+                        style={btnStyle} ><Glyph icon="triangle-right"/></Button> :
+                    <Button size="lg" type="primary"
+                        onClick={this.cmd_pause}
+                        disabled={!connected || this.state.cncStatus !== BabblerCnc.Status.WORKING}
+                        style={btnStyle} ><Glyph icon="quote"/></Button> 
+                }
+            </span>
         );
     },
     

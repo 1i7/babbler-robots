@@ -19,7 +19,7 @@ var QueueStatus = React.createClass({
         // слушаем события очереди команд
         this.dataListener = function(data, dir) {
             // команда добавлена или удалена из очереди
-            if(dir === Babbler.DataFlow.QUEUE) {
+            if(dir === Babbler.DataFlow.QUEUE || dir === Babbler.DataFlow.OUT) {
                 this.setState({
                     queueLength: this.props.babbler.queueLength,
                     queueLimit: this.props.babbler.queueLimit
@@ -28,7 +28,7 @@ var QueueStatus = React.createClass({
         }.bind(this);
         this.dataErrorListener = function(data, dir, err) {
             // команда добавлена или удалена из очереди
-            if(dir === Babbler.DataFlow.QUEUE) {
+            if(dir === Babbler.DataFlow.QUEUE || dir === Babbler.DataFlow.OUT) {
                 this.setState({
                     queueLength: this.props.babbler.queueLength,
                     queueLimit: this.props.babbler.queueLimit

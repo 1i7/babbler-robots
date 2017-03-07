@@ -130,7 +130,7 @@ function BabblerCnc(babbler, options) {
     
     // опрашиваем устройство только если подключены
     _babbler.on(Babbler.Event.CONNECTED, function() {
-        // TODO: есть отключить устройство после того, как вызван setTimeout(getPos),
+        // TODO: если отключить устройство после того, как вызван setTimeout(getPos),
         // а потом опять подключить до того, как он вызовет getPos, мы 
         // получим два рекурсивных getPos (один из таймаута, еще один - отсюда)
         getStatus();

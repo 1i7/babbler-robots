@@ -44,6 +44,7 @@ import CncTaskControl from './widgets/CncTaskControl';
 
 // Babbler.js
 import Babbler from 'babbler-js';
+//import Babbler from '../../../babbler-js/src/babbler';
 import BabblerCnc from '../babbler-cnc-js/src/babbler-cnc';
 
 const btnStyle = {
@@ -80,10 +81,10 @@ ReactDOM.render(
             <Tab label="Станок" >
                 <CncTaskControl babblerCnc={babblerCnc1} 
                     screen={{width:"100%", height:"450px"}} 
-                    fold={{dimX: 300, dimY:216}}/>
+                    fold={{dimX: 300, dimY:216, dimZ:100}}/>
                 {/*<DekartCanvas
                     screen={{width:"100%", height:"450"}} 
-                    fold={{dimX: 300, dimY:216}}
+                    fold={{dimX: 300, dimY:216, dimZ:200}}
                     pos="40 60 0"/>*/}
             </Tab>
             <Tab label="Калибровка" >

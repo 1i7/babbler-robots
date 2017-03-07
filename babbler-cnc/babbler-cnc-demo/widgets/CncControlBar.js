@@ -2,14 +2,21 @@
 
 var React = require('react');
 
-import {Button, Glyph} from 'elemental';
+import {Button} from 'elemental';
 
 import Babbler from 'babbler-js';
 import BabblerCnc from '../../babbler-cnc-js/src/babbler-cnc';
 
 const btnStyle = {
-  margin: 12
+  margin: 12,
+  paddingLeft: "0.6em",
+  paddingRight: "0.6em"
 };
+
+const iconStyle = {
+  fill: "white",
+  stroke: "none"
+}
 
 // Управление моторами
 var RraptorControlPanel = React.createClass({
@@ -57,16 +64,43 @@ var RraptorControlPanel = React.createClass({
                 <Button size="lg" type="danger"
                     onClick={this.cmd_stop}
                     disabled={!connected}
-                    style={btnStyle} ><Glyph icon="primitive-square"/></Button>
+                    style={btnStyle}>
+                        <svg version="1.0"
+                                width="20" height="20"
+                                viewBox="0 0 265 265">
+                            {/* Unicode Character 'BLACK SQUARE FOR STOP' (U+23F9)
+                              * http://www.fileformat.info/info/unicode/char/23f9/index.htm */}
+                            <path d="M196.875 287.1562 L34.875 287.1562 L34.875 125.1562 L196.875 125.1562 L196.875 287.1562 Z"
+                                style={iconStyle}/>
+                        </svg>
+                    </Button>
                 {(this.state.cncStatus === BabblerCnc.Status.PAUSED) ?
                     <Button size="lg" type="primary"
-                        onClick={this.cmd_resume}
-                        disabled={!connected}
-                        style={btnStyle} ><Glyph icon="triangle-right"/></Button> :
+                            onClick={this.cmd_resume}
+                            disabled={!connected}
+                            style={btnStyle}>
+                        <svg version="1.0"
+                                width="20" height="20"
+                                viewBox="0 40 250 250">
+                            {/* Unicode Character 'BLACK MEDIUM RIGHT-POINTING TRIANGLE' (U+23F5)
+                              * http://www.fileformat.info/info/unicode/char/23f5/index.htm */}
+                            <path d="M160.875 202.5 L70.875 292.5 L70.875 112.5 L160.875 202.5 Z"
+                                style={iconStyle}/>
+                        </svg>
+                    </Button> :
                     <Button size="lg" type="primary"
-                        onClick={this.cmd_pause}
-                        disabled={!connected || this.state.cncStatus !== BabblerCnc.Status.WORKING}
-                        style={btnStyle} ><Glyph icon="quote"/></Button> 
+                            onClick={this.cmd_pause}
+                            disabled={!connected || this.state.cncStatus !== BabblerCnc.Status.WORKING}
+                            style={{...btnStyle, paddingLeft: "0.6em", paddingRight: "0.6em"}}>
+                        <svg version="1.0"
+                                width="20" height="20"
+                                viewBox="0 0 265 265">
+                            {/* Unicode Character 'DOUBLE VERTICAL BAR' (U+23F8)
+                              * http://www.fileformat.info/info/unicode/char/23f8/index.htm */}
+                            <path d="M169.875 301.5 L133.875 301.5 L133.875 121.5 L169.875 121.5 L169.875 301.5 ZM97.875 301.5 L61.875 301.5 L61.875 121.5 L97.875 121.5 L97.875 301.5 Z"
+                                style={iconStyle}/>
+                        </svg>
+                    </Button>
                 }
             </span>
         );

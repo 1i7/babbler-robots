@@ -12,12 +12,20 @@ import BabblerCnc from '../../babbler-cnc-js/src/babbler-cnc';
 
 
 const btnStyle = {
-  margin: 12
+  margin: 12,
+  width: 50
 };
 
 const btnStyle1 = {
   marginTop: 12,
-  marginBottom: 12
+  marginBottom: 12,
+  width: 50
+};
+
+const btnStyle2 = {
+  marginLeft: 12,
+  marginRight: 12,
+  width: 50
 };
 
 var CncTaskControl = React.createClass({
@@ -70,24 +78,31 @@ var CncTaskControl = React.createClass({
             <div style={{display:"table-row"}}>
             <div style={{display:"table-cell",
                     verticalAlign:"top", textAlign: "right",
-                    paddingTop: 40, marginLeft: 60}}>
+                    paddingTop: 60, marginLeft: 60}}>
                 <Button size="lg" type="primary"
                     onMouseDown={this.cmd_rr_go_y_forward}
                     onMouseUp={this.cmd_stop}
                     disabled={!connected}
-                    style={btnStyle} ><Glyph icon="chevron-up"/></Button>
+                    style={btnStyle}><Glyph icon="chevron-up"/></Button>
+                    
                 <Button size="lg" type="warning"
                     onClick={this.cmd_rr_go_y_forward}
                     disabled={!connected}
-                    style={btnStyle} ><Glyph icon="triangle-up"/></Button>
+                    style={{...btnStyle2,
+                        borderBottomLeftRadius: 0, 
+                        borderBottomRightRadius: 0}}><Glyph icon="triangle-up"/></Button>
                 <Button size="lg" type="danger"
                     onClick={this.cmd_stop}
                     disabled={!connected}
-                    style={btnStyle} ><Glyph icon="primitive-square"/></Button>
+                    style={{...btnStyle2,
+                        borderRadius: 0}}><Glyph icon="primitive-square"/></Button>
                 <Button size="lg" type="warning"
                     onClick={this.cmd_rr_go_y_backward}
                     disabled={!connected}
-                    style={btnStyle} ><Glyph icon="triangle-down"/></Button>
+                    style={{...btnStyle2,
+                        borderTopLeftRadius: 0,
+                        borderTopRightRadius: 0}}><Glyph icon="triangle-down"/></Button>
+                    
                 <Button size="lg" type="primary"
                     onMouseDown={this.cmd_rr_go_y_backward}
                     onMouseUp={this.cmd_stop}
@@ -96,7 +111,7 @@ var CncTaskControl = React.createClass({
             </div>
             <div style={{display:"table-cell", width:"100%", textAlign: "center"}}>
             
-                <div style={{padding:30}}>
+                <div style={{padding:10}}>
                     <Paper zDepth={3}
                         style={{width: "100%", display: "inline-block", 
                                 textAlign: "center"}}>
@@ -135,24 +150,31 @@ var CncTaskControl = React.createClass({
             </div>
             <div style={{display:"table-cell",
                    verticalAlign:"top", textAlign: "left", 
-                   paddingTop: 40, marginRight: 60}}>
+                   paddingTop: 60, marginRight: 60}}>
                 <Button size="lg" type="primary"
                     onMouseDown={this.cmd_rr_go_z_forward}
                     onMouseUp={this.cmd_stop}
                     disabled={!connected}
-                    style={btnStyle} ><Glyph icon="chevron-up"/></Button>
+                    style={btnStyle}><Glyph icon="chevron-up"/></Button>
+                        
                 <Button size="lg" type="warning"
                     onClick={this.cmd_rr_go_z_forward}
                     disabled={!connected}
-                    style={btnStyle} ><Glyph icon="triangle-up"/></Button>
+                    style={{...btnStyle2,
+                        borderBottomLeftRadius: 0,
+                        borderBottomRightRadius: 0}}><Glyph icon="triangle-up"/></Button>
                 <Button size="lg" type="danger"
                     onClick={this.cmd_stop}
                     disabled={!connected}
-                    style={btnStyle} ><Glyph icon="primitive-square"/></Button>
+                    style={{...btnStyle2,
+                        borderRadius: 0}}><Glyph icon="primitive-square"/></Button>
                 <Button size="lg" type="warning"
                     onClick={this.cmd_rr_go_z_backward}
                     disabled={!connected}
-                    style={btnStyle} ><Glyph icon="triangle-down"/></Button>
+                    style={{...btnStyle2,
+                        borderTopLeftRadius: 0,
+                        borderTopRightRadius: 0}}><Glyph icon="triangle-down"/></Button>
+                    
                 <Button size="lg" type="primary"
                     onMouseDown={this.cmd_rr_go_z_backward}
                     onMouseUp={this.cmd_stop}

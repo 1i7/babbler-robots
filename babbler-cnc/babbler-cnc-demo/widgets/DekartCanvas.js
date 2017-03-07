@@ -54,10 +54,10 @@ var DekartCanvas = React.createClass({
                 width={this.props.screen.width}
                 height={this.props.screen.height}
                 viewBox={"" + 
-                    -30 + " " + 
-                    -30 + " " + 
-                    (this.props.fold.dimX + 60 + 30) + " " + 
-                    (this.props.fold.dimY + 60 + 30)}>
+                    -20 + " " + 
+                    -20 + " " + 
+                    (this.props.fold.dimX + 40 + 30) + " " + 
+                    (this.props.fold.dimY + 40)}>
          
             <g id="layer1"
                 transform={
@@ -103,7 +103,7 @@ var DekartCanvas = React.createClass({
                     - кружок перемещается по полю
                     - посередине крестик */}
                 <circle cx={tool.x} cy={tool.y} r={tool.z_radius} 
-                    style={{fill:"orange", stroke:"none"}}/>
+                    style={{fill:"orange", opacity:0.6, stroke:"none"}}/>
                 <line 
                     x1={tool.x-2} y1={tool.y}
                     x2={tool.x+2} y2={tool.y}

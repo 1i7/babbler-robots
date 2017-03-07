@@ -77,15 +77,11 @@ ReactDOM.render(
                 style={{marginRight: 4, marginLeft: 10}} />
         </Paper>
         
-        <Tabs style={{marginTop: 10}}>
+        <Tabs style={{marginTop: 10, marginBottom: 15}}>
             <Tab label="Станок" >
                 <CncTaskControl babblerCnc={babblerCnc1} 
-                    screen={{width:"100%", height:"450px"}} 
+                    screen={{width:"100%", height:"550px"}} 
                     fold={{dimX: 300, dimY:216, dimZ:100}}/>
-                {/*<DekartCanvas
-                    screen={{width:"100%", height:"450"}} 
-                    fold={{dimX: 300, dimY:216, dimZ:200}}
-                    pos="40 60 0"/>*/}
             </Tab>
             <Tab label="Калибровка" >
                 <div style={{padding: 30, paddingTop: 40, textAlign: "center"}}>

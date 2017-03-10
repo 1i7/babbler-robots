@@ -71,16 +71,16 @@ ReactDOM.render(
             <CncControlBar babblerCnc={babblerCnc1}
                 style={{position: "absolute", left: 0, marginLeft: 14}}/>
             <BabblerConnectionPanel babbler={babbler1}/>
-            <BabblerConnectionStatusIcon 
-                babbler={babbler1} 
+            <BabblerConnectionStatusIcon
+                babbler={babbler1}
                 iconSize={50}
                 style={{marginRight: 4, marginLeft: 10}} />
         </Paper>
         
         <Tabs style={{marginTop: 10, marginBottom: 15}}>
             <Tab label="Станок" >
-                <CncTaskControl babblerCnc={babblerCnc1} 
-                    screen={{width:"100%", height:"550px"}} 
+                <CncTaskControl babblerCnc={babblerCnc1}
+                    dekartStyle={{width: "100%", height: "calc(100vh - 250px)", minHeight:350}} 
                     fold={{dimX: 300, dimY:216, dimZ:100}}/>
             </Tab>
             <Tab label="Калибровка" >
@@ -114,7 +114,6 @@ ReactDOM.render(
                     style={{margin: 20}}/>
             </Tab>
         </Tabs>
-        
         
         <Paper style={{
                 position: "fixed", bottom: 0, 

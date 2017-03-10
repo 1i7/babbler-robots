@@ -74,114 +74,107 @@ var CncTaskControl = React.createClass({
     render: function() {
         var connected = this.state.deviceStatus === Babbler.Status.CONNECTED ? true : false;
         return (
-            <div style={{display:"table"}}>
-            <div style={{display:"table-row"}}>
-            <div style={{display:"table-cell",
-                    verticalAlign:"top", textAlign: "right",
-                    paddingTop: 60, marginLeft: 60}}>
-                <Button size="lg" type="primary"
-                    onMouseDown={this.cmd_rr_go_y_forward}
-                    onMouseUp={this.cmd_stop}
-                    disabled={!connected}
-                    style={btnStyle}><Glyph icon="chevron-up"/></Button>
-                    
-                <Button size="lg" type="warning"
-                    onClick={this.cmd_rr_go_y_forward}
-                    disabled={!connected}
-                    style={{...btnStyle2,
-                        borderBottomLeftRadius: 0, 
-                        borderBottomRightRadius: 0}}><Glyph icon="triangle-up"/></Button>
-                <Button size="lg" type="danger"
-                    onClick={this.cmd_stop}
-                    disabled={!connected}
-                    style={{...btnStyle2,
-                        borderRadius: 0}}><Glyph icon="primitive-square"/></Button>
-                <Button size="lg" type="warning"
-                    onClick={this.cmd_rr_go_y_backward}
-                    disabled={!connected}
-                    style={{...btnStyle2,
-                        borderTopLeftRadius: 0,
-                        borderTopRightRadius: 0}}><Glyph icon="triangle-down"/></Button>
-                    
-                <Button size="lg" type="primary"
-                    onMouseDown={this.cmd_rr_go_y_backward}
-                    onMouseUp={this.cmd_stop}
-                    disabled={!connected}
-                    style={btnStyle} ><Glyph icon="chevron-down"/></Button>
-            </div>
-            <div style={{display:"table-cell", width:"100%", textAlign: "center"}}>
-            
-                <div style={{padding:10}}>
-                    <Paper zDepth={3}
-                        style={{width: "100%", display: "inline-block", 
-                                textAlign: "center"}}>
+            <div style={{display: "flex", flexFlow: "row"}}>
+                <div style={{flexBasis: "0px",
+                        verticalAlign:"top", textAlign: "right",
+                        paddingTop: 60, marginLeft: 60}}>
+                    <Button size="lg" type="primary"
+                        onMouseDown={this.cmd_rr_go_y_forward}
+                        onMouseUp={this.cmd_stop}
+                        disabled={!connected}
+                        style={btnStyle}><Glyph icon="chevron-up"/></Button>
+                        
+                    <Button size="lg" type="warning"
+                        onClick={this.cmd_rr_go_y_forward}
+                        disabled={!connected}
+                        style={{...btnStyle2,
+                            borderBottomLeftRadius: 0,
+                            borderBottomRightRadius: 0}}><Glyph icon="triangle-up"/></Button>
+                    <Button size="lg" type="danger"
+                        onClick={this.cmd_stop}
+                        disabled={!connected}
+                        style={{...btnStyle2,
+                            borderRadius: 0}}><Glyph icon="primitive-square"/></Button>
+                    <Button size="lg" type="warning"
+                        onClick={this.cmd_rr_go_y_backward}
+                        disabled={!connected}
+                        style={{...btnStyle2,
+                            borderTopLeftRadius: 0,
+                            borderTopRightRadius: 0}}><Glyph icon="triangle-down"/></Button>
+                        
+                    <Button size="lg" type="primary"
+                        onMouseDown={this.cmd_rr_go_y_backward}
+                        onMouseUp={this.cmd_stop}
+                        disabled={!connected}
+                        style={btnStyle} ><Glyph icon="chevron-down"/></Button>
+                </div>
+                <div style={{flexBasis: "100%", textAlign: "center"}}>
+                    <Paper zDepth={3} style={{margin:10}}>
                         <DekartCanvas
-                            screen={this.props.screen}
+                            style={this.props.dekartStyle}
                             fold={this.props.fold}
                             posX={this.state.posX} posY={this.state.posY} posZ={this.state.posZ}/>
                     </Paper>
+                    <div>
+                        <Button size="lg" type="primary"
+                            onMouseDown={this.cmd_rr_go_x_backward}
+                            onMouseUp={this.cmd_stop}
+                            disabled={!connected}
+                            style={btnStyle} ><Glyph icon="chevron-left"/></Button>
+                        <ButtonGroup>
+                            <Button size="lg" type="warning"
+                                onClick={this.cmd_rr_go_x_backward}
+                                disabled={!connected}
+                                style={btnStyle1} ><Glyph icon="triangle-left"/></Button>
+                            <Button size="lg" type="danger"
+                                onClick={this.cmd_stop}
+                                disabled={!connected}
+                                style={btnStyle1} ><Glyph icon="primitive-square"/></Button>
+                            <Button size="lg" type="warning"
+                                onClick={this.cmd_rr_go_x_forward}
+                                disabled={!connected}
+                                style={btnStyle1} ><Glyph icon="triangle-right"/></Button>
+                        </ButtonGroup>
+                        <Button size="lg" type="primary"
+                            onMouseDown={this.cmd_rr_go_x_forward}
+                            onMouseUp={this.cmd_stop}
+                            disabled={!connected}
+                            style={btnStyle} ><Glyph icon="chevron-right"/></Button>
+                    </div>
                 </div>
-                <div>
+                <div style={{flexBasis:"0px",
+                       verticalAlign:"top", textAlign: "left",
+                       paddingTop: 60, marginRight: 60}}>
                     <Button size="lg" type="primary"
-                        onMouseDown={this.cmd_rr_go_x_backward}
+                        onMouseDown={this.cmd_rr_go_z_forward}
                         onMouseUp={this.cmd_stop}
                         disabled={!connected}
-                        style={btnStyle} ><Glyph icon="chevron-left"/></Button>
-                    <ButtonGroup>
-                        <Button size="lg" type="warning"
-                            onClick={this.cmd_rr_go_x_backward}
-                            disabled={!connected}
-                            style={btnStyle1} ><Glyph icon="triangle-left"/></Button>
-                        <Button size="lg" type="danger"
-                            onClick={this.cmd_stop}
-                            disabled={!connected}
-                            style={btnStyle1} ><Glyph icon="primitive-square"/></Button>
-                        <Button size="lg" type="warning"
-                            onClick={this.cmd_rr_go_x_forward}
-                            disabled={!connected}
-                            style={btnStyle1} ><Glyph icon="triangle-right"/></Button>
-                    </ButtonGroup>
-                    <Button size="lg" type="primary"
-                        onMouseDown={this.cmd_rr_go_x_forward}
-                        onMouseUp={this.cmd_stop}
+                        style={btnStyle}><Glyph icon="chevron-up"/></Button>
+                            
+                    <Button size="lg" type="warning"
+                        onClick={this.cmd_rr_go_z_forward}
                         disabled={!connected}
-                        style={btnStyle} ><Glyph icon="chevron-right"/></Button>
-                </div>
-            </div>
-            <div style={{display:"table-cell",
-                   verticalAlign:"top", textAlign: "left", 
-                   paddingTop: 60, marginRight: 60}}>
-                <Button size="lg" type="primary"
-                    onMouseDown={this.cmd_rr_go_z_forward}
-                    onMouseUp={this.cmd_stop}
-                    disabled={!connected}
-                    style={btnStyle}><Glyph icon="chevron-up"/></Button>
+                        style={{...btnStyle2,
+                            borderBottomLeftRadius: 0,
+                            borderBottomRightRadius: 0}}><Glyph icon="triangle-up"/></Button>
+                    <Button size="lg" type="danger"
+                        onClick={this.cmd_stop}
+                        disabled={!connected}
+                        style={{...btnStyle2,
+                            borderRadius: 0}}><Glyph icon="primitive-square"/></Button>
+                    <Button size="lg" type="warning"
+                        onClick={this.cmd_rr_go_z_backward}
+                        disabled={!connected}
+                        style={{...btnStyle2,
+                            borderTopLeftRadius: 0,
+                            borderTopRightRadius: 0}}><Glyph icon="triangle-down"/></Button>
                         
-                <Button size="lg" type="warning"
-                    onClick={this.cmd_rr_go_z_forward}
-                    disabled={!connected}
-                    style={{...btnStyle2,
-                        borderBottomLeftRadius: 0,
-                        borderBottomRightRadius: 0}}><Glyph icon="triangle-up"/></Button>
-                <Button size="lg" type="danger"
-                    onClick={this.cmd_stop}
-                    disabled={!connected}
-                    style={{...btnStyle2,
-                        borderRadius: 0}}><Glyph icon="primitive-square"/></Button>
-                <Button size="lg" type="warning"
-                    onClick={this.cmd_rr_go_z_backward}
-                    disabled={!connected}
-                    style={{...btnStyle2,
-                        borderTopLeftRadius: 0,
-                        borderTopRightRadius: 0}}><Glyph icon="triangle-down"/></Button>
-                    
-                <Button size="lg" type="primary"
-                    onMouseDown={this.cmd_rr_go_z_backward}
-                    onMouseUp={this.cmd_stop}
-                    disabled={!connected}
-                    style={btnStyle} ><Glyph icon="chevron-down"/></Button>
-            </div>
-            </div>
+                    <Button size="lg" type="primary"
+                        onMouseDown={this.cmd_rr_go_z_backward}
+                        onMouseUp={this.cmd_stop}
+                        disabled={!connected}
+                        style={btnStyle} ><Glyph icon="chevron-down"/></Button>
+                </div>
             </div>
         );
     },

@@ -2,11 +2,6 @@
 var React = require('react');
 
 /**
- * pixels
- * screen {
- *     width, height
- * }
- * 
  * mm
  * fold {
  *     x0, y0, z0, dimX, dimY, dimZ
@@ -46,18 +41,13 @@ var DekartCanvas = React.createClass({
             Math.log(tool.z + 1) / Math.log(this.props.fold.dimZ);
         
         return (
-            <svg
-                id="svg2"
-                version="1.0"
-                x="0.00000000"
-                y="0.00000000"
-                width={this.props.screen.width}
-                height={this.props.screen.height}
-                viewBox={"" + 
-                    -20 + " " + 
-                    -20 + " " + 
-                    (this.props.fold.dimX + 40 + 30) + " " + 
-                    (this.props.fold.dimY + 40)}>
+            <svg id="svg2" version="1.0"
+                viewBox={"" +
+                    -20 + " " +
+                    -20 + " " +
+                    (this.props.fold.dimX + 40 + 30) + " " +
+                    (this.props.fold.dimY + 40)}
+                style={this.props.style}>
          
             <g id="layer1"
                 transform={

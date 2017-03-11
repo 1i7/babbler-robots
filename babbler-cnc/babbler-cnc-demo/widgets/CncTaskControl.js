@@ -34,7 +34,9 @@ var CncTaskControl = React.createClass({
     getInitialState: function() {
         return {
             deviceStatus: this.props.babblerCnc.babbler.deviceStatus,
-            //pos: this.props.babblerCnc.pos,
+            dimX: this.props.babblerCnc.dim.x,
+            dimY: this.props.babblerCnc.dim.y,
+            dimZ: this.props.babblerCnc.dim.z,
             posX: this.props.babblerCnc.pos.x,
             posY: this.props.babblerCnc.pos.y,
             posZ: this.props.babblerCnc.pos.z,
@@ -55,7 +57,18 @@ var CncTaskControl = React.createClass({
             } else {
                 this.animate({posX: pos.x, posY: pos.y, posZ: pos.z}, 500);
                 this.setState({
-                //    pos: pos,
+                    err: ''
+                });
+            }
+        }.bind(this);
+        
+        // слушаем текущую позицию рабочего инструмента
+        this.cncDimListener = function(dim, err) {
+            if(err) {
+                this.setState({err: err.message});
+            } else {
+                this.animate({dimX: dim.x, dimY: dim.y, dimZ: dim.z}, 500);
+                this.setState({
                     err: ''
                 });
             }
@@ -63,12 +76,14 @@ var CncTaskControl = React.createClass({
         
         this.props.babblerCnc.babbler.on(Babbler.Event.STATUS, this.deviceStatusListener);
         this.props.babblerCnc.on(BabblerCnc.Event.POSITION, this.cncPosListener);
+        this.props.babblerCnc.on(BabblerCnc.Event.DIMENSIONS, this.cncDimListener);
     },
     
     componentWillUnmount: function() {
         // почистим слушателей
         this.props.babblerCnc.babbler.removeListener(Babbler.Event.STATUS, this.deviceStatusListener);
         this.props.babblerCnc.removeListener(BabblerCnc.Event.POSITION, this.cncPosListener);
+        this.props.babblerCnc.removeListener(BabblerCnc.Event.DIMENSIONS, this.cncDimListener);
     },
     
     render: function() {
@@ -101,7 +116,7 @@ var CncTaskControl = React.createClass({
                         style={{...btnStyle2,
                             borderTopLeftRadius: 0,
                             borderTopRightRadius: 0}}><Glyph icon="triangle-down"/></Button>
-                        
+                    
                     <Button size="lg" type="primary"
                         onMouseDown={this.cmd_rr_go_y_backward}
                         onMouseUp={this.cmd_stop}
@@ -112,8 +127,8 @@ var CncTaskControl = React.createClass({
                     <Paper zDepth={3} style={{margin:10}}>
                         <DekartCanvas
                             style={this.props.dekartStyle}
-                            fold={this.props.fold}
-                            posX={this.state.posX} posY={this.state.posY} posZ={this.state.posZ}/>
+                            fold={{dimX: this.state.dimX, dimY: this.state.dimY, dimZ: this.state.dimZ}}
+                            tool={{x: this.state.posX, y: this.state.posY, z: this.state.posZ}}/>
                     </Paper>
                     <div>
                         <Button size="lg" type="primary"
@@ -150,7 +165,7 @@ var CncTaskControl = React.createClass({
                         onMouseUp={this.cmd_stop}
                         disabled={!connected}
                         style={btnStyle}><Glyph icon="chevron-up"/></Button>
-                            
+                    
                     <Button size="lg" type="warning"
                         onClick={this.cmd_rr_go_z_forward}
                         disabled={!connected}
@@ -168,7 +183,7 @@ var CncTaskControl = React.createClass({
                         style={{...btnStyle2,
                             borderTopLeftRadius: 0,
                             borderTopRightRadius: 0}}><Glyph icon="triangle-down"/></Button>
-                        
+                    
                     <Button size="lg" type="primary"
                         onMouseDown={this.cmd_rr_go_z_backward}
                         onMouseUp={this.cmd_stop}

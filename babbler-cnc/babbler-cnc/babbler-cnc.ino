@@ -7,7 +7,8 @@
 #include "stepper.h"
 
 // отключить руководства, если мало места на чипе
-#define MANUALS
+// disable manuals to save space on chip
+//#define MANUALS_OFF
 
 // Размеры буферов для чтения команд и записи ответов
 // Read and write buffer size for communication modules
@@ -81,9 +82,9 @@ int cmd_step(char* reply_buffer, int reply_buf_size, int argc=0, char *argv[]=NU
         if(params_ok) {
             // все ок - делаем шаги
             stepper_start_cycle();
-                        
+            
             // команда выполнена
-            strcpy(reply_buffer, REPLY_OK); 
+            strcpy(reply_buffer, REPLY_OK);
         } else {
             // проблема с параметрами
             stepper_finish_cycle();
@@ -265,6 +266,29 @@ int cmd_pos(char* reply_buffer, int reply_buf_size, int argc=0, char *argv[]=NUL
 }
 
 
+/**
+ * Получить размеры рабочей области, нанометры
+ * запрос
+ *   dim
+ * ответ
+ *   dim_x dim_y dim_z
+ */
+/**
+ * Get working area dimensions, nanometers
+ * request
+ *   dim
+ * reply
+ *   dim_x dim_y dim_z
+ */
+int cmd_dim(char* reply_buffer, int reply_buf_size, int argc=0, char *argv[]=NULL) {
+    
+    unsigned long dim_x = _sm_x.max_pos - _sm_x.min_pos;
+    unsigned long dim_y = _sm_y.max_pos - _sm_y.min_pos;
+    unsigned long dim_z = _sm_z.max_pos - _sm_z.min_pos;
+    
+    sprintf(reply_buffer, "%d %d %d", dim_x, dim_y, dim_z);
+    return strlen(reply_buffer);
+}
 
 
 babbler_cmd_t CMD_STEP = {
@@ -470,6 +494,30 @@ babbler_man_t MAN_POS = {
     "Get position of one or all motors."
 };
 
+babbler_cmd_t CMD_DIM = {
+    /* имя команды */ 
+    /* command name */
+    "dim",
+    /* указатель на функцию с реализацией команды */ 
+    /* pointer to function with command implementation*/ 
+    &cmd_dim
+};
+
+babbler_man_t MAN_DIM = {
+    /* имя команды */ 
+    /* command name */
+    "dim",
+    /* краткое описание */ 
+    /* short description */
+    "get working area dimensions",
+    /* руководство */ 
+    /* manual */
+    "SYNOPSIS\n"
+    "    dim\n"
+    "DESCRIPTION\n"
+    "Get working area dimensions."
+};
+
 /** Зарегистрированные команды */
 /** Registered commands */
 extern const babbler_cmd_t BABBLER_COMMANDS[] = {
@@ -487,7 +535,8 @@ extern const babbler_cmd_t BABBLER_COMMANDS[] = {
     CMD_RESUME,
     CMD_STOP,
     CMD_STATUS,
-    CMD_POS
+    CMD_POS,
+    CMD_DIM
 };
 
 /** Количество зарегистрированных команд */
@@ -498,7 +547,7 @@ extern const int BABBLER_COMMANDS_COUNT = sizeof(BABBLER_COMMANDS)/sizeof(babble
 /** Руководства для зарегистрированных команд */
 /** Manuals for registered commands */
 extern const babbler_man_t BABBLER_MANUALS[] = {
-#ifdef MANUALS
+#ifndef MANUALS_OFF
     // команды из babbler_cmd_core.h
     // commands from babbler_cmd.core.h
     MAN_HELP,
@@ -513,8 +562,9 @@ extern const babbler_man_t BABBLER_MANUALS[] = {
     MAN_RESUME,
     MAN_STOP,
     MAN_STATUS,
-    MAN_POS
-#endif // MANUALS
+    MAN_POS,
+    MAN_DIM
+#endif // MANUALS_OFF
 };
 
 /** Количество руководств для зарегистрированных команд */

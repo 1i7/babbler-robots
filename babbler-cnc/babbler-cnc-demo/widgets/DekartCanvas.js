@@ -8,7 +8,7 @@ var React = require('react');
  * }
  * 
  * mm
- * pos "x y z"
+ * tool "x y z"
  */
 var DekartCanvas = React.createClass({
 // https://www.w3.org/TR/SVG/coords#TransformAttribute
@@ -19,20 +19,16 @@ var DekartCanvas = React.createClass({
         //var gridSpacing;
         //var unit;
         
-        //var pos = this.props.pos ? this.props.pos : {x:0, y:0, z:0};
-        var tool = {
-            x: this.props.posX ? this.props.posX/1000000 : 0,
-            y: this.props.posY ? this.props.posY/1000000 : 0,
-            z: this.props.posZ ? this.props.posZ/1000000 : 0};
+        var tool = this.props.tool ? {...this.props.tool} : {x: 0, y: 0, z: 0};
         
         // масштабируем реальную высоту по Z в экранную высоту по Y
         tool.z_y = (tool.z/this.props.fold.dimZ)*this.props.fold.dimY;
         
-        // Посчитать радиус рабочего блока с учетом его "близости" к - чем выше блок
-        // по оси z, тем больше радиус.
+        // Посчитать радиус рабочего блока с учетом его "близости" к наблюдателю - 
+        // чем выше блок по оси z, тем больше радиус.
         // Вариант с логорифмическим масштабом - чем ниже блок по оси z, тем быстрее
         // меняется радиус (приятнее для визуализации работы двумерного плоттера,
-        // т.к. у него рабочий блок гуляет не по всей оси z, а в меняет два
+        // т.к. у него рабочий блок гуляет не по всей оси z, а меняет два
         // положения, оба близкие к поверхности стола).
         // https://github.com/1i7/rraptor/blob/master/RraptorPult/src/com/rraptor/pult/view/PlotterAreaView.java#L81
         var minRadius = 3, maxRadius = 8;

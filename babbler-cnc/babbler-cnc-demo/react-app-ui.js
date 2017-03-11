@@ -80,20 +80,19 @@ ReactDOM.render(
         <Tabs style={{marginTop: 10, marginBottom: 15}}>
             <Tab label="Станок" >
                 <CncTaskControl babblerCnc={babblerCnc1}
-                    dekartStyle={{width: "100%", height: "calc(100vh - 250px)", minHeight:350}} 
-                    fold={{dimX: 300, dimY:216, dimZ:100}}/>
-            </Tab>
-            <Tab label="Калибровка" >
-                <div style={{padding: 30, paddingTop: 40, textAlign: "center"}}>
-                    <Paper style={{textAlign: "center", display: "inline-block", padding: 20}}>
-                        <CncCalibrate babbler={babbler1}/>
-                    </Paper>
-                </div>
+                    dekartStyle={{width: "100%", height: "calc(100vh - 250px)", minHeight:350}}/>
             </Tab>
             <Tab label="Моторы" >
                 <div style={{padding: 30, paddingTop: 40, textAlign: "center"}}>
                     <Paper style={{textAlign: "center", display: "inline-block", padding: 20}}>
                         <CncXYZControl babbler={babbler1}/>
+                    </Paper>
+                </div>
+            </Tab>
+            <Tab label="Калибровка" >
+                <div style={{padding: 30, paddingTop: 40, textAlign: "center"}}>
+                    <Paper style={{textAlign: "center", display: "inline-block", padding: 20}}>
+                        <CncCalibrate babbler={babbler1}/>
                     </Paper>
                 </div>
             </Tab>

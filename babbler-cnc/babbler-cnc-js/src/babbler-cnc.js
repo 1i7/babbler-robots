@@ -37,7 +37,11 @@ const BabblerCncEvent = {
     /**
      * Смена положения рабочего инструмента.
      */
-    POSITION: "pos"
+    POSITION: "pos",
+    /**
+     * Новое значение размеров рабочей области.
+     */
+    DIMENSIONS: "dim"
 }
 
 function BabblerCnc(babbler, options) {
@@ -55,8 +59,14 @@ function BabblerCnc(babbler, options) {
     
     // текущая позиция рабочего инструмента
     var _rawPos = "0 0 0";
-    var _pos = {x:0, y:0, z:0};
+    var _pos = {x: 0, y: 0, z: 0};
     var _posErr;
+    
+    // размер рабочей области, по умолчанию считаем
+    // 200x200x150мм
+    var _rawDim = "200 200 150";
+    var _dim = {x: 200, y: 200, z: 150};
+    var _dimErr;
     
     // 
     // Задержки между опросами устройства
@@ -109,15 +119,37 @@ function BabblerCnc(babbler, options) {
                     _rawPos = reply;
                     
                     var posArr = _rawPos.split(" ");
-                    _pos.x = parseInt(posArr[0], 10);
-                    _pos.y = parseInt(posArr[1], 10);
-                    _pos.z = parseInt(posArr[2], 10);
+                    _pos.x = parseInt(posArr[0], 10)/1000000;
+                    _pos.y = parseInt(posArr[1], 10)/1000000;
+                    _pos.z = parseInt(posArr[2], 10)/1000000;
                     
                     this.emit(BabblerCncEvent.POSITION, _pos, undefined);
                 }
                 
                 if(_babbler.deviceStatus === Babbler.Status.CONNECTED) {
                     setTimeout(getPos, _posPollDelay);
+                }
+            }.bind(this)
+        );
+    }.bind(this);
+    
+    // получить текущий размер рабочей области
+    var getDim = function() {
+        _babbler.sendCmd("dim", [],
+            // onResult
+            function(err, reply, cmd, params) {
+                if(err) {
+                    _dimErr = err;
+                    this.emit(BabblerCncEvent.DIMENSIONS, undefined, err);
+                } else if(_rawDim !== reply) {
+                    _rawDim = reply;
+                    
+                    var dimArr = _rawDim.split(" ");
+                    _dim.x = parseInt(dimArr[0], 10)/1000000;
+                    _dim.y = parseInt(dimArr[1], 10)/1000000;
+                    _dim.z = parseInt(dimArr[2], 10)/1000000;
+                    
+                    this.emit(BabblerCncEvent.DIMENSIONS, _dim, undefined);
                 }
             }.bind(this)
         );
@@ -135,6 +167,7 @@ function BabblerCnc(babbler, options) {
         // получим два рекурсивных getPos (один из таймаута, еще один - отсюда)
         getStatus();
         getPos();
+        getDim();
     });
     
     Object.defineProperties(this, {
@@ -164,11 +197,27 @@ function BabblerCnc(babbler, options) {
             }
         },
         /** 
-         * Ошибка получения текущая позиция рабочего блока
+         * Ошибка получения текущей позиция рабочего блока
          */
         posErr: {
             get: function() {
                 return _posErr;
+            }
+        },
+        /** 
+         * Размер рабочей области
+         */
+        dim: {
+            get: function() {
+                return _dim;
+            }
+        },
+        /** 
+         * Ошибка получения размеров рабочей области
+         */
+        dimErr: {
+            get: function() {
+                return _dimErr;
             }
         }
     });

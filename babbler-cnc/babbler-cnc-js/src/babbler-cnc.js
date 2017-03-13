@@ -64,8 +64,8 @@ function BabblerCnc(babbler, options) {
     
     // размер рабочей области, по умолчанию считаем
     // 200x200x150мм
-    var _rawDim = "200 200 150";
-    var _dim = {x: 200, y: 200, z: 150};
+    var _rawDim = "200000000 200000000 150000000";
+    var _dim = {x: 200000000, y: 200000000, z: 150000000};
     var _dimErr;
     
     // 
@@ -119,9 +119,9 @@ function BabblerCnc(babbler, options) {
                     _rawPos = reply;
                     
                     var posArr = _rawPos.split(" ");
-                    _pos.x = parseInt(posArr[0], 10)/1000000;
-                    _pos.y = parseInt(posArr[1], 10)/1000000;
-                    _pos.z = parseInt(posArr[2], 10)/1000000;
+                    _pos.x = parseInt(posArr[0], 10);
+                    _pos.y = parseInt(posArr[1], 10);
+                    _pos.z = parseInt(posArr[2], 10);
                     
                     this.emit(BabblerCncEvent.POSITION, _pos, undefined);
                 }
@@ -145,9 +145,9 @@ function BabblerCnc(babbler, options) {
                     _rawDim = reply;
                     
                     var dimArr = _rawDim.split(" ");
-                    _dim.x = parseInt(dimArr[0], 10)/1000000;
-                    _dim.y = parseInt(dimArr[1], 10)/1000000;
-                    _dim.z = parseInt(dimArr[2], 10)/1000000;
+                    _dim.x = parseInt(dimArr[0], 10);
+                    _dim.y = parseInt(dimArr[1], 10);
+                    _dim.z = parseInt(dimArr[2], 10);
                     
                     this.emit(BabblerCncEvent.DIMENSIONS, _dim, undefined);
                 }

@@ -28,6 +28,7 @@ const btnStyle2 = {
   width: 50
 };
 
+
 var CncTaskControl = React.createClass({
     mixins: [React.Animate],
 
@@ -94,13 +95,13 @@ var CncTaskControl = React.createClass({
                         verticalAlign:"top", textAlign: "right",
                         paddingTop: 60, marginLeft: 60}}>
                     <Button size="lg" type="primary"
-                        onMouseDown={this.cmd_rr_go_y_forward}
+                        onMouseDown={this.cmd_whirl_y_forward}
                         onMouseUp={this.cmd_stop}
                         disabled={!connected}
                         style={btnStyle}><Glyph icon="chevron-up"/></Button>
                         
                     <Button size="lg" type="warning"
-                        onClick={this.cmd_rr_go_y_forward}
+                        onClick={this.cmd_whirl_y_forward}
                         disabled={!connected}
                         style={{...btnStyle2,
                             borderBottomLeftRadius: 0,
@@ -111,14 +112,14 @@ var CncTaskControl = React.createClass({
                         style={{...btnStyle2,
                             borderRadius: 0}}><Glyph icon="primitive-square"/></Button>
                     <Button size="lg" type="warning"
-                        onClick={this.cmd_rr_go_y_backward}
+                        onClick={this.cmd_whirl_y_backward}
                         disabled={!connected}
                         style={{...btnStyle2,
                             borderTopLeftRadius: 0,
                             borderTopRightRadius: 0}}><Glyph icon="triangle-down"/></Button>
                     
                     <Button size="lg" type="primary"
-                        onMouseDown={this.cmd_rr_go_y_backward}
+                        onMouseDown={this.cmd_whirl_y_backward}
                         onMouseUp={this.cmd_stop}
                         disabled={!connected}
                         style={btnStyle} ><Glyph icon="chevron-down"/></Button>
@@ -132,13 +133,13 @@ var CncTaskControl = React.createClass({
                     </Paper>
                     <div>
                         <Button size="lg" type="primary"
-                            onMouseDown={this.cmd_rr_go_x_backward}
+                            onMouseDown={this.cmd_whirl_x_backward}
                             onMouseUp={this.cmd_stop}
                             disabled={!connected}
                             style={btnStyle} ><Glyph icon="chevron-left"/></Button>
                         <ButtonGroup>
                             <Button size="lg" type="warning"
-                                onClick={this.cmd_rr_go_x_backward}
+                                onClick={this.cmd_whirl_x_backward}
                                 disabled={!connected}
                                 style={btnStyle1} ><Glyph icon="triangle-left"/></Button>
                             <Button size="lg" type="danger"
@@ -146,12 +147,12 @@ var CncTaskControl = React.createClass({
                                 disabled={!connected}
                                 style={btnStyle1} ><Glyph icon="primitive-square"/></Button>
                             <Button size="lg" type="warning"
-                                onClick={this.cmd_rr_go_x_forward}
+                                onClick={this.cmd_whirl_x_forward}
                                 disabled={!connected}
                                 style={btnStyle1} ><Glyph icon="triangle-right"/></Button>
                         </ButtonGroup>
                         <Button size="lg" type="primary"
-                            onMouseDown={this.cmd_rr_go_x_forward}
+                            onMouseDown={this.cmd_whirl_x_forward}
                             onMouseUp={this.cmd_stop}
                             disabled={!connected}
                             style={btnStyle} ><Glyph icon="chevron-right"/></Button>
@@ -161,13 +162,13 @@ var CncTaskControl = React.createClass({
                        verticalAlign:"top", textAlign: "left",
                        paddingTop: 60, marginRight: 60}}>
                     <Button size="lg" type="primary"
-                        onMouseDown={this.cmd_rr_go_z_forward}
+                        onMouseDown={this.cmd_whirl_z_forward}
                         onMouseUp={this.cmd_stop}
                         disabled={!connected}
                         style={btnStyle}><Glyph icon="chevron-up"/></Button>
                     
                     <Button size="lg" type="warning"
-                        onClick={this.cmd_rr_go_z_forward}
+                        onClick={this.cmd_whirl_z_forward}
                         disabled={!connected}
                         style={{...btnStyle2,
                             borderBottomLeftRadius: 0,
@@ -178,14 +179,14 @@ var CncTaskControl = React.createClass({
                         style={{...btnStyle2,
                             borderRadius: 0}}><Glyph icon="primitive-square"/></Button>
                     <Button size="lg" type="warning"
-                        onClick={this.cmd_rr_go_z_backward}
+                        onClick={this.cmd_whirl_z_backward}
                         disabled={!connected}
                         style={{...btnStyle2,
                             borderTopLeftRadius: 0,
                             borderTopRightRadius: 0}}><Glyph icon="triangle-down"/></Button>
                     
                     <Button size="lg" type="primary"
-                        onMouseDown={this.cmd_rr_go_z_backward}
+                        onMouseDown={this.cmd_whirl_z_backward}
                         onMouseUp={this.cmd_stop}
                         disabled={!connected}
                         style={btnStyle} ><Glyph icon="chevron-down"/></Button>
@@ -205,27 +206,27 @@ var CncTaskControl = React.createClass({
         }
     },
     
-    cmd_rr_go_x_forward: function() {
+    cmd_whirl_x_forward: function() {
         this.props.babblerCnc.babbler.sendCmd("whirl", ["x", "1", "1000"], this.onResult);
     },
     
-    cmd_rr_go_x_backward: function() {
+    cmd_whirl_x_backward: function() {
         this.props.babblerCnc.babbler.sendCmd("whirl", ["x", "-1", "1000"], this.onResult);
     },
     
-    cmd_rr_go_y_forward: function() {
+    cmd_whirl_y_forward: function() {
         this.props.babblerCnc.babbler.sendCmd("whirl", ["y", "1", "1000"], this.onResult);
     },
     
-    cmd_rr_go_y_backward: function() {
+    cmd_whirl_y_backward: function() {
         this.props.babblerCnc.babbler.sendCmd("whirl", ["y", "-1", "1000"], this.onResult);
     },
     
-    cmd_rr_go_z_forward: function() {
+    cmd_whirl_z_forward: function() {
         this.props.babblerCnc.babbler.sendCmd("whirl", ["z", "1", "1000"], this.onResult);
     },
     
-    cmd_rr_go_z_backward: function() {
+    cmd_whirl_z_backward: function() {
         this.props.babblerCnc.babbler.sendCmd("whirl", ["z", "-1", "1000"], this.onResult);
     },
     

@@ -2,6 +2,7 @@
 
 var React = require('react');
 
+import TextField from 'material-ui/TextField';
 import {Button, ButtonGroup, Glyph} from 'elemental';
 
 import Babbler from 'babbler-js';
@@ -15,6 +16,12 @@ const btnStyle1 = {
   marginBottom: 12
 };
 
+
+const txtStyle = {
+  marginLeft: 12,
+  marginRight: 12
+}
+
 // Управление моторами
 var CncXYZControl = React.createClass({
 // https://facebook.github.io/react/docs/events.html
@@ -24,7 +31,13 @@ var CncXYZControl = React.createClass({
     getInitialState: function() {
         return {
             deviceStatus: this.props.babbler.deviceStatus,
-            err: ''
+            err: '',
+            stepCountX: "10000",
+            stepDelayX: "1000",
+            stepCountY: "10000",
+            stepDelayY: "1000",
+            stepCountZ: "10000",
+            stepDelayZ: "1000"
         };
     },
     
@@ -47,14 +60,9 @@ var CncXYZControl = React.createClass({
             <div style={{textAlign: "center"}}>
                 <div>
                     X:
-                    <Button size="lg" type="primary"
-                        onMouseDown={this.cmd_rr_go_x_backward}
-                        onMouseUp={this.cmd_stop}
-                        disabled={!connected}
-                        style={btnStyle} ><Glyph icon="chevron-left"/></Button>
-                    <ButtonGroup>
+                    <ButtonGroup style={btnStyle}>
                         <Button size="lg" type="warning"
-                            onClick={this.cmd_rr_go_x_backward}
+                            onClick={this.cmd_step_x_backward}
                             disabled={!connected}
                             style={btnStyle1} ><Glyph icon="triangle-left"/></Button>
                         <Button size="lg" type="danger"
@@ -62,26 +70,35 @@ var CncXYZControl = React.createClass({
                             disabled={!connected}
                             style={btnStyle1} ><Glyph icon="primitive-square"/></Button>
                         <Button size="lg" type="warning"
-                            onClick={this.cmd_rr_go_x_forward}
+                            onClick={this.cmd_step_x_forward}
                             disabled={!connected}
                             style={btnStyle1} ><Glyph icon="triangle-right"/></Button>
                     </ButtonGroup>
-                    <Button size="lg" type="primary"
-                        onMouseDown={this.cmd_rr_go_x_forward}
-                        onMouseUp={this.cmd_stop}
+                    
+                    <TextField 
+                        floatingLabelText="количество шагов"
+                        hintText={"10000"}
+                        value={this.state.stepCountX}
+                        onChange={function(event) {
+                            this.setState({stepCountX: event.target.value});
+                        }.bind(this)}
                         disabled={!connected}
-                        style={btnStyle} ><Glyph icon="chevron-right"/></Button>
+                        style={txtStyle}/>
+                    <TextField 
+                        floatingLabelText="задержка, мкс"
+                        hintText={"1000"}
+                        value={this.state.stepDelayX}
+                        onChange={function(event) {
+                            this.setState({stepDelayX: event.target.value});
+                        }.bind(this)}
+                        disabled={!connected}
+                        style={txtStyle}/>
                 </div>
                 <div>
                     Y:
-                    <Button size="lg" type="primary"
-                        onMouseDown={this.cmd_rr_go_y_backward}
-                        onMouseUp={this.cmd_stop}
-                        disabled={!connected}
-                        style={btnStyle} ><Glyph icon="chevron-left"/></Button>
-                    <ButtonGroup>
+                    <ButtonGroup style={btnStyle}>
                         <Button size="lg" type="warning"
-                            onClick={this.cmd_rr_go_y_backward}
+                            onClick={this.cmd_step_y_backward}
                             disabled={!connected}
                             style={btnStyle1} ><Glyph icon="triangle-left"/></Button>
                         <Button size="lg" type="danger"
@@ -89,26 +106,35 @@ var CncXYZControl = React.createClass({
                             disabled={!connected}
                             style={btnStyle1} ><Glyph icon="primitive-square"/></Button>
                         <Button size="lg" type="warning"
-                            onClick={this.cmd_rr_go_y_forward}
+                            onClick={this.cmd_step_y_forward}
                             disabled={!connected}
                             style={btnStyle1} ><Glyph icon="triangle-right"/></Button>
                     </ButtonGroup>
-                    <Button size="lg" type="primary"
-                        onMouseDown={this.cmd_rr_go_y_forward}
-                        onMouseUp={this.cmd_stop}
+                    
+                    <TextField 
+                        floatingLabelText="количество шагов"
+                        hintText={"10000"}
+                        value={this.state.stepCountY}
+                        onChange={function(event) {
+                            this.setState({stepCountY: event.target.value});
+                        }.bind(this)}
                         disabled={!connected}
-                        style={btnStyle} ><Glyph icon="chevron-right"/></Button>
+                        style={txtStyle}/>
+                    <TextField 
+                        floatingLabelText="задержка, мкс"
+                        hintText={"1000"}
+                        value={this.state.stepDelayY}
+                        onChange={function(event) {
+                            this.setState({stepDelayY: event.target.value});
+                        }.bind(this)}
+                        disabled={!connected}
+                        style={txtStyle}/>
                 </div>
                 <div>
                     Z:
-                    <Button size="lg" type="primary"
-                        onMouseDown={this.cmd_rr_go_z_backward}
-                        onMouseUp={this.cmd_stop}
-                        disabled={!connected}
-                        style={btnStyle} ><Glyph icon="chevron-left"/></Button>
-                    <ButtonGroup>
+                    <ButtonGroup style={btnStyle}>
                         <Button size="lg" type="warning"
-                            onClick={this.cmd_rr_go_z_backward}
+                            onClick={this.cmd_step_z_backward}
                             disabled={!connected}
                             style={btnStyle1} ><Glyph icon="triangle-left"/></Button>
                         <Button size="lg" type="danger"
@@ -116,15 +142,29 @@ var CncXYZControl = React.createClass({
                             disabled={!connected}
                             style={btnStyle1} ><Glyph icon="primitive-square"/></Button>
                         <Button size="lg" type="warning"
-                            onClick={this.cmd_rr_go_z_forward}
+                            onClick={this.cmd_step_z_forward}
                             disabled={!connected}
                             style={btnStyle1} ><Glyph icon="triangle-right"/></Button>
                     </ButtonGroup>
-                    <Button size="lg" type="primary"
-                        onMouseDown={this.cmd_rr_go_z_forward}
-                        onMouseUp={this.cmd_stop}
+                    
+                    <TextField 
+                        floatingLabelText="количество шагов"
+                        hintText={"10000"}
+                        value={this.state.stepCountZ}
+                        onChange={function(event) {
+                            this.setState({stepCountZ: event.target.value});
+                        }.bind(this)}
                         disabled={!connected}
-                        style={btnStyle} ><Glyph icon="chevron-right"/></Button>
+                        style={txtStyle}/>
+                    <TextField 
+                        floatingLabelText="задержка, мкс"
+                        hintText={"1000"}
+                        value={this.state.stepDelayZ}
+                        onChange={function(event) {
+                            this.setState({stepDelayZ: event.target.value});
+                        }.bind(this)}
+                        disabled={!connected}
+                        style={txtStyle}/>
                 </div>
                 <div>
                 err: {this.state.err}
@@ -144,28 +184,28 @@ var CncXYZControl = React.createClass({
         }
     },
     
-    cmd_rr_go_x_forward: function() {
-        this.props.babbler.sendCmd("whirl", ["x", "1", "1000"], this.onResult);
+    cmd_step_x_forward: function() {
+        this.props.babbler.sendCmd("step", ["x", this.state.stepCountX, this.state.stepDelayX], this.onResult);
     },
     
-    cmd_rr_go_x_backward: function() {
-        this.props.babbler.sendCmd("whirl", ["x", "-1", "1000"], this.onResult);
+    cmd_step_x_backward: function() {
+        this.props.babbler.sendCmd("step", ["x", -this.state.stepCountX, this.state.stepDelayX], this.onResult);
     },
     
-    cmd_rr_go_y_forward: function() {
-        this.props.babbler.sendCmd("whirl", ["y", "1", "1000"], this.onResult);
+    cmd_step_y_forward: function() {
+        this.props.babbler.sendCmd("step", ["y", this.state.stepCountY, this.state.stepDelayY], this.onResult);
     },
     
-    cmd_rr_go_y_backward: function() {
-        this.props.babbler.sendCmd("whirl", ["y", "-1", "1000"], this.onResult);
+    cmd_step_y_backward: function() {
+        this.props.babbler.sendCmd("step", ["y", -this.state.stepCountY, this.state.stepDelayY], this.onResult);
     },
     
-    cmd_rr_go_z_forward: function() {
-        this.props.babbler.sendCmd("whirl", ["z", "1", "1000"], this.onResult);
+    cmd_step_z_forward: function() {
+        this.props.babbler.sendCmd("step", ["z", this.state.stepCountZ, this.state.stepDelayZ], this.onResult);
     },
     
-    cmd_rr_go_z_backward: function() {
-        this.props.babbler.sendCmd("whirl", ["z", "-1", "1000"], this.onResult);
+    cmd_step_z_backward: function() {
+        this.props.babbler.sendCmd("step", ["z", -this.state.stepCountZ, this.state.stepDelayZ], this.onResult);
     },
     
     cmd_stop: function() {

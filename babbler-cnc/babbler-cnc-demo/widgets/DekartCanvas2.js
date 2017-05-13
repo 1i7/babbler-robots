@@ -64,6 +64,8 @@ var DekartCanvas2 = React.createClass({
             Math.log(toolMM.z + 1) / Math.log(foldMM.dimZ);
         
         var lab_txt_size = 12;
+        var indent_x = 40;
+        var indent_y = 30;
         var z_gap = 30;
         
         var createRulers = function() {
@@ -101,7 +103,7 @@ var DekartCanvas2 = React.createClass({
                         <text key={"tick"+i}
                             x={i + 2/matrix.a} y={-(foldMM.dimY + 2/matrix.a)}
                             style={{stroke:"gray", fontSize: tick_font_size/matrix.a,
-                                vectorEffect: "non-scaling-stroke",
+                                strokeWidth: 0.1,
                                 transform: "scale(1, -1)"}}>{i}</text>
                     );
                 }
@@ -122,7 +124,7 @@ var DekartCanvas2 = React.createClass({
                         <text key={"tick"+i}
                             x={-15/matrix.a} y={-(i + 2/matrix.a)}
                             style={{stroke:"gray", fontSize: tick_font_size/matrix.a,
-                                vectorEffect: "non-scaling-stroke",
+                                strokeWidth: 0.1,
                                 transform: "scale(1, -1)"}}>{i}</text>
                     );
                 }
@@ -145,7 +147,7 @@ var DekartCanvas2 = React.createClass({
                         <text key={"tick"+i}
                             x={foldMM.dimX + (z_gap+2)/matrix.a} y={-(i*k_z2y + 2/matrix.a)}
                             style={{stroke:"gray", fontSize: tick_font_size/matrix.a,
-                                vectorEffect: "non-scaling-stroke",
+                                strokeWidth: 0.1,
                                 transform: "scale(1, -1)"}}>{i}</text>
                     );
                 }
@@ -167,10 +169,10 @@ var DekartCanvas2 = React.createClass({
             
             // видимая область
             document.getElementById('dekart').setAttribute("viewBox", "" +
-                (-20 / matrix.a) + " " +
-                (-20 / matrix.a) + " " +
-                (foldMM.dimX + ((40 + z_gap)/ matrix.a)) + " " +
-                (foldMM.dimY + (40 / matrix.a)) 
+                (-indent_x / matrix.a) + " " +
+                (-indent_y / matrix.a) + " " +
+                (foldMM.dimX + ((indent_x*2 + z_gap)/ matrix.a)) + " " +
+                (foldMM.dimY + (indent_y*2 / matrix.a)) 
             );
             
             // ось z
@@ -217,11 +219,13 @@ var DekartCanvas2 = React.createClass({
         return (
             <svg id="dekart" version="1.0"
                 viewBox={"" +
-                    -20 + " " +
-                    -20 + " " +
-                    (foldMM.dimX + 40 + z_gap) + " " +
-                    (foldMM.dimY + 40)}
-                style={this.props.style}>
+                    -indent_x + " " +
+                    -indent_y + " " +
+                    (foldMM.dimX + indent_x*2 + z_gap) + " " +
+                    (foldMM.dimY + indent_y*2)}
+                style={this.props.style}
+                shapeRendering="crispEdges">
+                
          
             <g id="layer1"
                 transform={
@@ -240,13 +244,11 @@ var DekartCanvas2 = React.createClass({
                 
                 <text id="lab_x"
                     x={foldMM.dimX} y={10}
-                    style={{stroke: "gray", fontSize: "12px",
-                        vectorEffect: "non-scaling-stroke",
+                    style={{stroke: "gray", fontSize: "12", strokeWidth: 0.1,
                         transform: "scale(1, -1)"}}>x</text>
                 <text id="lab_y"
                     x={-30} y={-foldMM.dimY}
-                    style={{stroke: "gray", fontSize: "12px",
-                        vectorEffect: "non-scaling-stroke",
+                    style={{stroke: "gray", fontSize: "12px", strokeWidth: 0.1,
                         transform: "scale(1, -1)"}}>y</text>
                         
                 {/* Ось Z справа отдельно */}
@@ -259,15 +261,15 @@ var DekartCanvas2 = React.createClass({
                 
                 <text id="lab_z"
                     x={foldMM.dimX+z_gap+20} y={-foldMM.dimY}
-                    style={{stroke: "gray", fontSize: "12px",
-                        vectorEffect: "non-scaling-stroke",
+                    style={{stroke: "gray", fontSize: "12px", strokeWidth: 0.1,
                         transform: "scale(1, -1)"}}>z</text>
                  
                 {/* Рабочий инструмент в плоскости X,Y:
                     - кружок перемещается по полю
                     - посередине крестик */}
                 <circle id="tool_x_y" cx={toolMM.x} cy={toolMM.y} r={toolMM.z_radius} 
-                    style={{fill: "orange", opacity:0.6, stroke: "none"}}/>
+                    style={{fill: "orange", opacity:0.6, stroke: "none"}}
+                    shapeRendering="auto"/>
                 <line id="tool_x_y_l1"
                     x1={toolMM.x-2} y1={toolMM.y}
                     x2={toolMM.x+2} y2={toolMM.y}

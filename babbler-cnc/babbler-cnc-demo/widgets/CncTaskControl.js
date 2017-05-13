@@ -5,7 +5,8 @@ require('react.animate');
 import {Button, ButtonGroup, Glyph} from 'elemental';
 import Paper from 'material-ui/Paper';
 
-import DekartCanvas from './DekartCanvas';
+//import DekartCanvas from './DekartCanvas';
+import DekartCanvas2 from './DekartCanvas2';
 
 import Babbler from 'babbler-js';
 import BabblerCnc from '../../babbler-cnc-js/src/babbler-cnc';
@@ -126,7 +127,7 @@ var CncTaskControl = React.createClass({
                 </div>
                 <div style={{flexBasis: "100%", textAlign: "center"}}>
                     <Paper zDepth={3} style={{margin:10}}>
-                        <DekartCanvas
+                        <DekartCanvas2
                             style={this.props.dekartStyle}
                             fold={{dimX: this.state.dimX, dimY: this.state.dimY, dimZ: this.state.dimZ}}
                             tool={{x: this.state.posX, y: this.state.posY, z: this.state.posZ}}/>

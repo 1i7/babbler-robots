@@ -63,78 +63,84 @@ function BabblerCnc(babbler, options) {
     var _posErr;
     
     // размер рабочей области, по умолчанию считаем
-    // 200x200x150мм
+    // 390x240x240мм
     var _rawDim = "390000000 240000000 240000000";
     var _dim = {x: 390000000, y: 240000000, z: 240000000};
     var _dimErr;
     
     // 
-    // Задержки между опросами устройства
+    // Опрос устройства
     
-    /**
-     * По умолчанию получаем текущую позицию с устройства два раза в секунду
-     */
+    // Статус: работает/ожидает команды
+    /** По умолчанию получаем текущий статус устройства два раза в секунду */
     var _statusPollDelay = options.statusPollDelay ? options.statusPollDelay : 500;
+    /** Опрос текущего статуса */
+    var _statusIntId = 0;
+    /** Ожидаем ответ на запрос текущего статуса */
+    var _statusWaitReply = false;
     
-    /**
-     * По умолчанию получаем текущую позицию с устройства пять раз в секунду
-     */
+    // Текущая позиция рабочего инструмента
+    /** По умолчанию получаем текущую позицию с устройства пять раз в секунду */
     var _posPollDelay = options.posPollDelay ? options.posPollDelay : 200;
+    /** Опрос текущей позиции */
+    var _posIntId = 0;
+    /** Ожидаем ответ на запрос текущей позиции */
+    var _posWaitReply = false;
     
+    //
     // Опрашиватели
     
     // опрашивать текущий статус рабочего инструмента
-    var getStatus = function() {
-        _babbler.sendCmd("status", [],
-            // onResult
-            function(err, reply, cmd, params) {
-                if(err) {
-                    _cncStatusErr = err;
-                } else {
-                    _cncStatus = reply;
-                }
-                this.emit(BabblerCncEvent.STATUS, _cncStatus, err);
-                
-                if(_babbler.deviceStatus === Babbler.Status.CONNECTED) {
-                    setTimeout(getStatus, _statusPollDelay);
-                }
-            }.bind(this)
-        );
+    var _getStatus = function() {
+        // отправлять новый запрос только в том случае,
+        // если получили ответ на предыдущий
+        if(!_statusWaitReply) {
+            _statusWaitReply = true;
+            _babbler.sendCmd("status", [],
+                // onResult
+                function(err, reply, cmd, params) {
+                    _statusWaitReply = false;
+                    if(err) {
+                        _cncStatusErr = err;
+                    } else {
+                        _cncStatus = reply;
+                    }
+                    this.emit(BabblerCncEvent.STATUS, _cncStatus, err);
+                }.bind(this)
+            );
+        }
     }.bind(this);
     
-    // начинаем опрашивать, если уже подключены
-    if(_babbler.deviceStatus === Babbler.Status.CONNECTED) {
-        getStatus();
-    }
-    
     // опрашивать текущее положение рабочего инструмента
-    var getPos = function() {
-        _babbler.sendCmd("pos", [],
-            // onResult
-            function(err, reply, cmd, params) {
-                if(err) {
-                    _posErr = err;
-                    this.emit(BabblerCncEvent.POSITION, undefined, err);
-                } else if(_rawPos !== reply) {
-                    _rawPos = reply;
-                    
-                    var posArr = _rawPos.split(" ");
-                    _pos.x = parseInt(posArr[0], 10);
-                    _pos.y = parseInt(posArr[1], 10);
-                    _pos.z = parseInt(posArr[2], 10);
-                    
-                    this.emit(BabblerCncEvent.POSITION, _pos, undefined);
-                }
-                
-                if(_babbler.deviceStatus === Babbler.Status.CONNECTED) {
-                    setTimeout(getPos, _posPollDelay);
-                }
-            }.bind(this)
-        );
+    var _getPos = function() {
+        // отправлять новый запрос только в том случае,
+        // если получили ответ на предыдущий
+        if(!_posWaitReply) {
+            _posWaitReply = true;
+            _babbler.sendCmd("pos", [],
+                // onResult
+                function(err, reply, cmd, params) {
+                    _posWaitReply = false;
+                    if(err) {
+                        _posErr = err;
+                        this.emit(BabblerCncEvent.POSITION, undefined, err);
+                    } else if(_rawPos !== reply) {
+                        _rawPos = reply;
+                        
+                        var posArr = _rawPos.split(" ");
+                        _pos.x = parseInt(posArr[0], 10);
+                        _pos.y = parseInt(posArr[1], 10);
+                        _pos.z = parseInt(posArr[2], 10);
+                        
+                        this.emit(BabblerCncEvent.POSITION, _pos, undefined);
+                    }
+                }.bind(this)
+            );
+        }
     }.bind(this);
     
     // получить текущий размер рабочей области
-    var getDim = function() {
+    var _getDim = function() {
         _babbler.sendCmd("dim", [],
             // onResult
             function(err, reply, cmd, params) {
@@ -157,17 +163,22 @@ function BabblerCnc(babbler, options) {
     
     // начинаем опрашивать, если уже подключены
     if(_babbler.deviceStatus === Babbler.Status.CONNECTED) {
-        getPos();
+        _statusIntId = setInterval(_getStatus, _statusPollDelay);
+        _posIntId = setInterval(_getPos, _posPollDelay);
+        _getDim();
     }
     
     // опрашиваем устройство только если подключены
     _babbler.on(Babbler.Event.CONNECTED, function() {
-        // TODO: если отключить устройство после того, как вызван setTimeout(getPos),
-        // а потом опять подключить до того, как он вызовет getPos, мы 
-        // получим два рекурсивных getPos (один из таймаута, еще один - отсюда)
-        getStatus();
-        getPos();
-        getDim();
+        _statusIntId = setInterval(_getStatus, _statusPollDelay);
+        _posIntId = setInterval(_getPos, _posPollDelay);
+        _getDim();
+    });
+    
+    // перестаём опрашивать устройство, если отключились
+    _babbler.on(Babbler.Event.DISCONNECTED, function() {
+        clearInterval(_statusIntId);
+        clearInterval(_posIntId);
     });
     
     Object.defineProperties(this, {

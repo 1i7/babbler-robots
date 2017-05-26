@@ -189,7 +189,7 @@ var CncXYZControl = React.createClass({
     },
     
     cmd_step_x_backward: function() {
-        this.props.babbler.sendCmd("step", ["x", -this.state.stepCountX, this.state.stepDelayX], this.onResult);
+        this.props.babbler.sendCmd("step", ["x", "-"+this.state.stepCountX, this.state.stepDelayX], this.onResult);
     },
     
     cmd_step_y_forward: function() {
@@ -197,7 +197,7 @@ var CncXYZControl = React.createClass({
     },
     
     cmd_step_y_backward: function() {
-        this.props.babbler.sendCmd("step", ["y", -this.state.stepCountY, this.state.stepDelayY], this.onResult);
+        this.props.babbler.sendCmd("step", ["y", "-"+this.state.stepCountY, this.state.stepDelayY], this.onResult);
     },
     
     cmd_step_z_forward: function() {
@@ -205,7 +205,7 @@ var CncXYZControl = React.createClass({
     },
     
     cmd_step_z_backward: function() {
-        this.props.babbler.sendCmd("step", ["z", -this.state.stepCountZ, this.state.stepDelayZ], this.onResult);
+        this.props.babbler.sendCmd("step", ["z", "-"+this.state.stepCountZ, this.state.stepDelayZ], this.onResult);
     },
     
     cmd_stop: function() {

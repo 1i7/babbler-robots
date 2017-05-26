@@ -244,7 +244,7 @@ var DekartCanvas2 = React.createClass({
                 
                 <text id="lab_x"
                     x={foldMM.dimX} y={10}
-                    style={{stroke: "gray", fontSize: "12", strokeWidth: 0.1,
+                    style={{stroke: "gray", fontSize: "12px", strokeWidth: 0.1,
                         transform: "scale(1, -1)"}}>x</text>
                 <text id="lab_y"
                     x={-30} y={-foldMM.dimY}

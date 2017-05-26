@@ -115,15 +115,28 @@ void setup() {
     //     end_strategy min_end_strategy, end_strategy max_end_strategy,
     //     long min_pos, long max_pos);
     
+//    // Драйвер1
+//    init_stepper(&_sm_x, 'x', 36, 37, NO_PIN, false, 1000, 7500); 
+//    init_stepper_ends(&_sm_x, NO_PIN, NO_PIN, CONST, CONST, 0, 300000000);
+//    //init_stepper_ends(&_sm_x, 3, 4, CONST, CONST, 0, 300000);
+//    // Драйвер2
+//    init_stepper(&_sm_y, 'y', 38, 39, NO_PIN, false, 1000, 7500);
+//    init_stepper_ends(&_sm_y, NO_PIN, NO_PIN, CONST, CONST, 0, 216000000);
+//    // Драйвер3
+//    init_stepper(&_sm_z, 'z', 40, 41, NO_PIN, false, 1000, 7500);
+//    init_stepper_ends(&_sm_z, NO_PIN, NO_PIN, CONST, CONST, 0, 100000000);
+
+    // CNC-шилд
+
     // Драйвер1
-    init_stepper(&_sm_x, 'x', 36, 37, NO_PIN, false, 1000, 7500); 
+    init_stepper(&_sm_x, 'x', 2, 5, 8, false, 1000, 7500); 
     init_stepper_ends(&_sm_x, NO_PIN, NO_PIN, CONST, CONST, 0, 300000000);
     //init_stepper_ends(&_sm_x, 3, 4, CONST, CONST, 0, 300000);
     // Драйвер2
-    init_stepper(&_sm_y, 'y', 38, 39, NO_PIN, false, 1000, 7500);
+    init_stepper(&_sm_y, 'y', 3, 6, 8, false, 1000, 7500);
     init_stepper_ends(&_sm_y, NO_PIN, NO_PIN, CONST, CONST, 0, 216000000);
     // Драйвер3
-    init_stepper(&_sm_z, 'z', 40, 41, NO_PIN, false, 1000, 7500);
+    init_stepper(&_sm_z, 'z', 4, 7, 8, false, 1000, 7500);
     init_stepper_ends(&_sm_z, NO_PIN, NO_PIN, CONST, CONST, 0, 100000000);
 
     //

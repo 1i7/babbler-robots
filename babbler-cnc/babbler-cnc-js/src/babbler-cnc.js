@@ -26,7 +26,7 @@ const CncStatus = {
 
 /**
  * События, на которые можно подписываться через интерфейс EventListener:
- *     Babbler.on(event, callback);
+ *     BabblerCnc.on(event, callback);
  */
 const BabblerCncEvent = {
     /** 
@@ -68,121 +68,66 @@ function BabblerCnc(babbler, options) {
     var _dim = {x: 390000000, y: 240000000, z: 240000000};
     var _dimErr;
     
+    
     // 
     // Опрос устройства
+    // получаем текущий размер рабочей области один раз при подключении
+    _babbler.stickProp("dim", "dim", []);
     
     // Статус: работает/ожидает команды
-    /** По умолчанию получаем текущий статус устройства два раза в секунду */
-    var _statusPollDelay = options.statusPollDelay ? options.statusPollDelay : 500;
-    /** Опрос текущего статуса */
-    var _statusIntId = 0;
-    /** Ожидаем ответ на запрос текущего статуса */
-    var _statusWaitReply = false;
+    // получаем текущий статус устройства два раза в секунду
+    _babbler.stickProp("status", "status", [], 500);
     
     // Текущая позиция рабочего инструмента
-    /** По умолчанию получаем текущую позицию с устройства пять раз в секунду */
-    var _posPollDelay = options.posPollDelay ? options.posPollDelay : 200;
-    /** Опрос текущей позиции */
-    var _posIntId = 0;
-    /** Ожидаем ответ на запрос текущей позиции */
-    var _posWaitReply = false;
+    // получаем текущую позицию с устройства пять раз в секунду
+    _babbler.stickProp("pos", "pos", [], options.posPollDelay);
     
     //
-    // Опрашиватели
-    
-    // опрашивать текущий статус рабочего инструмента
-    var _getStatus = function() {
-        // отправлять новый запрос только в том случае,
-        // если получили ответ на предыдущий
-        if(!_statusWaitReply) {
-            _statusWaitReply = true;
-            _babbler.sendCmd("status", [],
-                // onResult
-                function(err, reply, cmd, params) {
-                    _statusWaitReply = false;
-                    if(err) {
-                        _cncStatusErr = err;
-                    } else {
-                        _cncStatus = reply;
-                    }
-                    this.emit(BabblerCncEvent.STATUS, _cncStatus, err);
-                }.bind(this)
-            );
+    // События - новые значения свойств
+    _babbler.on(Babbler.Event.PROP, function(prop, err, val) {
+        if(prop === "dim") {
+            // получили текущий размер рабочей области
+            if(err) {
+                _dimErr = err;
+                this.emit(BabblerCncEvent.DIMENSIONS, undefined, err);
+            } else if(_rawDim !== val) {
+                _rawDim = val;
+                
+                var dimArr = _rawDim.split(" ");
+                _dim.x = parseInt(dimArr[0], 10);
+                _dim.y = parseInt(dimArr[1], 10);
+                _dim.z = parseInt(dimArr[2], 10);
+                
+                this.emit(BabblerCncEvent.DIMENSIONS, _dim, undefined);
+            }
+        } else if(prop === "status") {
+            // получили текущий статус рабочего инструмента
+            if(err) {
+                _cncStatusErr = err;
+            } else {
+                _cncStatus = val;
+            }
+            this.emit(BabblerCncEvent.STATUS, _cncStatus, err);
+        } else if(prop === "pos") {
+           // получили текущее положение рабочего инструмента
+            if(err) {
+                _posErr = err;
+                this.emit(BabblerCncEvent.POSITION, undefined, err);
+            } else if(_rawPos !== val) {
+                _rawPos = val;
+                
+                var posArr = _rawPos.split(" ");
+                _pos.x = parseInt(posArr[0], 10);
+                _pos.y = parseInt(posArr[1], 10);
+                _pos.z = parseInt(posArr[2], 10);
+                
+                this.emit(BabblerCncEvent.POSITION, _pos, undefined);
+            }
         }
-    }.bind(this);
-    
-    // опрашивать текущее положение рабочего инструмента
-    var _getPos = function() {
-        // отправлять новый запрос только в том случае,
-        // если получили ответ на предыдущий
-        if(!_posWaitReply) {
-            _posWaitReply = true;
-            _babbler.sendCmd("pos", [],
-                // onResult
-                function(err, reply, cmd, params) {
-                    _posWaitReply = false;
-                    if(err) {
-                        _posErr = err;
-                        this.emit(BabblerCncEvent.POSITION, undefined, err);
-                    } else if(_rawPos !== reply) {
-                        _rawPos = reply;
-                        
-                        var posArr = _rawPos.split(" ");
-                        _pos.x = parseInt(posArr[0], 10);
-                        _pos.y = parseInt(posArr[1], 10);
-                        _pos.z = parseInt(posArr[2], 10);
-                        
-                        this.emit(BabblerCncEvent.POSITION, _pos, undefined);
-                    }
-                }.bind(this)
-            );
-        }
-    }.bind(this);
-    
-    // получить текущий размер рабочей области
-    var _getDim = function() {
-        _babbler.sendCmd("dim", [],
-            // onResult
-            function(err, reply, cmd, params) {
-                if(err) {
-                    _dimErr = err;
-                    this.emit(BabblerCncEvent.DIMENSIONS, undefined, err);
-                } else if(_rawDim !== reply) {
-                    _rawDim = reply;
-                    
-                    var dimArr = _rawDim.split(" ");
-                    _dim.x = parseInt(dimArr[0], 10);
-                    _dim.y = parseInt(dimArr[1], 10);
-                    _dim.z = parseInt(dimArr[2], 10);
-                    
-                    this.emit(BabblerCncEvent.DIMENSIONS, _dim, undefined);
-                }
-            }.bind(this)
-        );
-    }.bind(this);
-    
-    // начинаем опрашивать, если уже подключены
-    if(_babbler.deviceStatus === Babbler.Status.CONNECTED) {
-        _statusIntId = setInterval(_getStatus, _statusPollDelay);
-        _posIntId = setInterval(_getPos, _posPollDelay);
-        _getDim();
-    }
-    
-    // опрашиваем устройство только если подключены
-    _babbler.on(Babbler.Event.CONNECTED, function() {
-        _statusIntId = setInterval(_getStatus, _statusPollDelay);
-        _posIntId = setInterval(_getPos, _posPollDelay);
-        _getDim();
-    });
-    
-    // перестаём опрашивать устройство, если отключились
-    _babbler.on(Babbler.Event.DISCONNECTED, function() {
-        clearInterval(_statusIntId);
-        clearInterval(_posIntId);
-    });
+    }.bind(this));
     
     Object.defineProperties(this, {
-        /** 
+        /**
          * Устройство Babbler
          */
         babbler: {
@@ -190,7 +135,7 @@ function BabblerCnc(babbler, options) {
                 return _babbler;
             }
         },
-        /** 
+        /**
          * Статус рабочего блока: остановлен, работает, на паузе, не определен
          * (stopped, working, paused, n/a)
          */
@@ -199,7 +144,7 @@ function BabblerCnc(babbler, options) {
                 return _cncStatus;
             }
         },
-        /** 
+        /**
          * Текущая позиция рабочего блока
          */
         pos: {
@@ -207,7 +152,7 @@ function BabblerCnc(babbler, options) {
                 return _pos;
             }
         },
-        /** 
+        /**
          * Ошибка получения текущей позиция рабочего блока
          */
         posErr: {
@@ -215,7 +160,7 @@ function BabblerCnc(babbler, options) {
                 return _posErr;
             }
         },
-        /** 
+        /**
          * Размер рабочей области
          */
         dim: {
@@ -223,7 +168,7 @@ function BabblerCnc(babbler, options) {
                 return _dim;
             }
         },
-        /** 
+        /**
          * Ошибка получения размеров рабочей области
          */
         dimErr: {
@@ -237,6 +182,7 @@ function BabblerCnc(babbler, options) {
 // наследуем Babbler от EventEmitter, чтобы
 // генерировать события красиво
 inherits(BabblerCnc, EventEmitter);
+
 // Перечисления и константы для публики
 
 /** События */

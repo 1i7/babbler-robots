@@ -18,6 +18,7 @@ var Babbler = require('babbler-js');
  *     BabblerScript.on(event, callback);
  */
 const BabblerScriptEvent = {
+    PROGRAM: "program",
     PROGRAM_COUNTER: "program_counter",
     STATE: "state",
     MICRO_STATE: "micro_state"
@@ -120,6 +121,12 @@ function BabblerScript(babbler, options) {
             if(_prog_counter >= _program.length) {
                 // закончили
                 clearInterval(progInt);
+                
+                // счетчик в стартовую позицию
+                _prog_counter = -1;
+                this.emit(BabblerScriptEvent.PROGRAM_COUNTER, _prog_counter);
+                
+                // 
                 _microState = ProgMicroState.STOPPED;
                 this.emit(BabblerScriptEvent.MICRO_STATE, _microState);
                 _setState(ProgState.STOPPED);
@@ -161,7 +168,7 @@ function BabblerScript(babbler, options) {
                 );
             } else {
                 // устройство не готово принять команду, попробуем в след раз
-                // prog_state = ProgMicroState.NEXT_CMD;
+                // _microState = ProgMicroState.NEXT_CMD;
             }
         } else if(_microState == ProgMicroState.GET_STATUS) {
             // нам важно один раз опросить статус вручную
@@ -224,16 +231,32 @@ function BabblerScript(babbler, options) {
     }.bind(this);
     
     /**
+     * Установить программу - массив команд для последовательного выполнения.
+     */
+    this.setProgram = function(prog) {
+        if(prog === undefined) {
+            _program = [];
+        } else {
+            _program = prog;
+        }
+        
+        this.emit(BabblerScriptEvent.PROGRAM, _program);
+    }
+    
+    /**
      * Запустить программу выполняться.
      */
     this.runProgram = function(prog) {
-        _program = prog;
+        if(prog != undefined) {
+            this.setProgram(prog);
+        }
         
         // запускаем программу с 1й команды
         _prog_counter = 0;
         this.emit(BabblerScriptEvent.PROGRAM_COUNTER, _prog_counter);
         _microState = ProgMicroState.NEXT_CMD;
         this.emit(BabblerScriptEvent.MICRO_STATE, _microState);
+        _setState(ProgState.RUNNING);
         
         progInt = setInterval(_progTick, 200);
     }

@@ -298,6 +298,60 @@ exports.BabblerScriptTest = {
         
         var dev = new BabblerFakeDevice("/dev/ttyUSB0");
         babbler.connect("test:/dev/ttyUSB0", {dev: dev});
+    },
+    
+    "babbler-script.event: program": function(test) {
+        // сколько будет тестов
+        test.expect(4);
+        
+        var Babbler = require('babbler-js');
+        var BabblerScript = require('../src/babbler-script');
+        
+        var babbler = new Babbler();
+        babbler.stickProp('status', 'status', [], 500);
+        var babblerScript = new BabblerScript(babbler);
+        
+        var eventCount = 0;
+        babblerScript.on('program', function(prog) {
+            eventCount++;
+            
+            if(eventCount == 1) {
+                test.equal(JSON.stringify(prog), JSON.stringify([
+                    {cmd: "work", params: ["100"]}, 
+                    {cmd: "work", params: ["200"]}
+                ]), "from setProgram: 'prog' param is the same value as set");
+                
+                test.equal(JSON.stringify(babblerScript.program), JSON.stringify([
+                    {cmd: "work", params: ["100"]}, 
+                    {cmd: "work", params: ["200"]}
+                ]), "from setProgram: 'babblerScript.program' prop is the same value as set");
+            } else if(eventCount == 2) {
+                test.equal(JSON.stringify(prog), JSON.stringify([
+                    {cmd: "work", params: ["300"]}, 
+                    {cmd: "work", params: ["400"]}
+                ]), "from runProgram: 'prog' param is the same value as set");
+                
+                test.equal(JSON.stringify(babblerScript.program), JSON.stringify([
+                    {cmd: "work", params: ["300"]}, 
+                    {cmd: "work", params: ["400"]}
+                ]), "from runProgram: 'babblerScript.program' prop is the same value as set");
+                
+                // закончили здесь
+                test.done();
+            }
+        });
+        
+        // задать скрипт без выполнения
+        babblerScript.setProgram([
+            {cmd: "work", params: ["100"]}, 
+            {cmd: "work", params: ["200"]}
+        ]);
+        
+        // задать скрипт и сразу выполнить
+        babblerScript.setProgram([
+            {cmd: "work", params: ["300"]}, 
+            {cmd: "work", params: ["400"]}
+        ]);
     }
 };
 

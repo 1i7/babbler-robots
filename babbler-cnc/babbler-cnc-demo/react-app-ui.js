@@ -24,20 +24,21 @@ import Subheader from 'material-ui/Subheader';
 //var BabblerConnectionErrorSnackbar = require('babbler-js-material-ui').BabblerConnectionErrorSnackbar;
 //var BabblerConnectionPanel = require('babbler-js-material-ui').BabblerConnectionPanel;
 //var BabblerDataFlow = require('babbler-js-material-ui').BabblerDataFlow;
+//var BabblerCmdQueueStatus = require('babbler-js-material-ui').BabblerCmdQueueStatus;
 
 import BabblerConnectionStatusIcon from 'babbler-js-material-ui/lib/BabblerConnectionStatusIcon';
 import BabblerConnectionErrorSnackbar from 'babbler-js-material-ui/lib/BabblerConnectionErrorSnackbar';
 import BabblerConnectionPanel from 'babbler-js-material-ui/lib/BabblerConnectionPanel';
 import BabblerDataFlow from 'babbler-js-material-ui/lib/BabblerDataFlow';
 import BabblerDebugPanel from 'babbler-js-material-ui/lib/BabblerDebugPanel';
-
-import QueueStatus from './widgets/QueueStatus';
+import BabblerCmdQueueStatus from 'babbler-js-material-ui/lib/BabblerCmdQueueStatus';
 
 import CncStatus from './widgets/CncStatus';
 import CurrentPos from './widgets/CurrentPos';
 import CncControlBar from './widgets/CncControlBar';
 import CncCalibrate from './widgets/CncCalibrate';
 import CncXYZControl from './widgets/CncXYZControl';
+
 
 import CncTaskControl from './widgets/CncTaskControl';
 //import DekartCanvas from './widgets/DekartCanvas';
@@ -60,6 +61,7 @@ var babblerCnc1 = new BabblerCnc(babbler1, {posPollDelay: 200});
 // (node) warning: possible EventEmitter memory leak detected. 11 listeners added. 
 // Use emitter.setMaxListeners() to increase limit.
 babbler1.setMaxListeners(20);
+
 
 // babbler1.on(Babbler.Event.STATUS, function(){});
  
@@ -120,7 +122,7 @@ ReactDOM.render(
             <Divider style={{width: "100%"}}/>
             <CurrentPos babblerCnc={babblerCnc1} style={{marginRight: 10}}/>
             <CncStatus babblerCnc={babblerCnc1} style={{marginRight: 10}}/>
-            <QueueStatus babbler={babbler1} style={{marginRight: 10}}/> 
+            <BabblerCmdQueueStatus babbler={babbler1} style={{marginRight: 10}}/> 
         </Paper>
         
         <BabblerConnectionErrorSnackbar babbler={babbler1}/>

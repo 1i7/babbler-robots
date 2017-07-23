@@ -39,6 +39,20 @@ import CncControlBar from './widgets/CncControlBar';
 import CncCalibrate from './widgets/CncCalibrate';
 import CncXYZControl from './widgets/CncXYZControl';
 
+// BabblerScript
+import BabblerScriptState from 'babbler-script-react/lib/BabblerScriptState';
+import BabblerScriptMicroState from 'babbler-script-react/lib/BabblerScriptMicroState';
+import BabblerScriptProgramCounter from 'babbler-script-react/lib/BabblerScriptProgramCounter';
+import BabblerScriptControlBar from 'babbler-script-react/lib/BabblerScriptControlBar';
+import BabblerScriptLoad from 'babbler-script-react/lib/BabblerScriptLoad';
+import BabblerScriptProgram from 'babbler-script-react/lib/BabblerScriptProgram';
+
+//import BabblerScriptState from '../../../babbler-script-react/src/BabblerScriptState';
+//import BabblerScriptMicroState from '../../../babbler-script-react/src/BabblerScriptMicroState';
+//import BabblerScriptProgramCounter from '../../../babbler-script-react/src/BabblerScriptProgramCounter';
+//import BabblerScriptControlBar from '../../../babbler-script-react/src/BabblerScriptControlBar';
+//import BabblerScriptLoad from '../../../babbler-script-react/src/BabblerScriptLoad';
+//import BabblerScriptProgram from '../../../babbler-script-react/src/BabblerScriptProgram';
 
 import CncTaskControl from './widgets/CncTaskControl';
 //import DekartCanvas from './widgets/DekartCanvas';
@@ -47,6 +61,8 @@ import CncTaskControl from './widgets/CncTaskControl';
 import Babbler from 'babbler-js';
 //import Babbler from '../../../babbler-js/src/babbler';
 import BabblerCnc from '../babbler-cnc-js/src/babbler-cnc';
+import BabblerScript from 'babbler-script-js';
+//import BabblerScript from '../../../babbler-script-js/src/babbler-script';
 
 const btnStyle = {
   margin: 12
@@ -56,6 +72,7 @@ const btnStyle = {
 // Устройство Babbler, подключенное к последовательному порту
 var babbler1 = new Babbler();
 var babblerCnc1 = new BabblerCnc(babbler1, {posPollDelay: 200});
+var babblerScript1 = new BabblerScript(babbler1);
 
 // Т.к. добавляем много слушателей, получаем предупреждение:
 // (node) warning: possible EventEmitter memory leak detected. 11 listeners added. 
@@ -83,6 +100,16 @@ ReactDOM.render(
             <Tab label="Станок" >
                 <CncTaskControl babblerCnc={babblerCnc1}
                     dekartStyle={{width: "100%", height: "calc(100vh - 250px)", minHeight:350}}/>
+            </Tab>
+            <Tab label="Программа" >
+                <div style={{padding: 10}}>
+                    <Paper style={{padding: 2, marginBottom: 20}}>
+                        <BabblerScriptControlBar babblerScript={babblerScript1}/>
+                        <BabblerScriptLoad babblerScript={babblerScript1} debug={true}/>
+                    </Paper>
+                    <BabblerScriptProgram babblerScript={babblerScript1}
+                        style={{width: "100%"}}/>
+                </div>
             </Tab>
             <Tab label="Моторы" >
                 <div style={{padding: 30, paddingTop: 40, textAlign: "center"}}>
@@ -120,7 +147,10 @@ ReactDOM.render(
                 position: "fixed", bottom: 0, 
                 width: "100%", textAlign: "right"}}>
             <Divider style={{width: "100%"}}/>
-            <CurrentPos babblerCnc={babblerCnc1} style={{marginRight: 10}}/>
+            <BabblerScriptState babblerScript={babblerScript1} style={{marginRight: 10}}/>
+            [<BabblerScriptMicroState babblerScript={babblerScript1}/>]
+            <BabblerScriptProgramCounter babblerScript={babblerScript1} style={{marginLeft: 10, marginRight: 10}}/>|
+            <CurrentPos babblerCnc={babblerCnc1} style={{marginLeft: 10, marginRight: 10}}/>
             <CncStatus babblerCnc={babblerCnc1} style={{marginRight: 10}}/>
             <BabblerCmdQueueStatus babbler={babbler1} style={{marginRight: 10}}/> 
         </Paper>

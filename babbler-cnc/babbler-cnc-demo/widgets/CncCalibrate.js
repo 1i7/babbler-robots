@@ -15,7 +15,7 @@ const btnStyle1 = {
   marginBottom: 12
 };
 
-// Управление моторами
+// Калибровка моторов
 var CncCalibrate = React.createClass({
 // https://facebook.github.io/react/docs/events.html
 // http://elemental-ui.com/buttons

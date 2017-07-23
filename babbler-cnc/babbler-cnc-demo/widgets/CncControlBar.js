@@ -18,8 +18,8 @@ const iconStyle = {
   stroke: "none"
 }
 
-// Управление моторами
-var RraptorControlPanel = React.createClass({
+// Панель управления станком (стоп/пауза/продолжить)
+var CncControlBar = React.createClass({
 // https://facebook.github.io/react/docs/events.html
 // http://elemental-ui.com/buttons
 // http://elemental-ui.com/glyphs
@@ -131,5 +131,5 @@ var RraptorControlPanel = React.createClass({
 });
 
 // отправляем компонент на публику
-module.exports = RraptorControlPanel;
+module.exports = CncControlBar;
 
